@@ -1,6 +1,6 @@
 {
   "name": "cyberpsychosis-plugins",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "description": "Cyberpsychosis Runtime Plugins — Chemistry CA, 2D Physics, Baba-style Logic, Logistics Flow, Social Utility AI, and Semantic LLM-to-DSL Bridge",
   "author": "PlutoKeating <PlutoKeating@outlook.com>",
@@ -36,7 +36,7 @@
     }
   },
   "dependencies": {
-    "cyberpsychosis-core": "0.1.0"
+    "cyberpsychosis-core": "0.2.0"
   },
   "publishConfig": {
     "access": "public",

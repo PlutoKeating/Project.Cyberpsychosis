@@ -1,6 +1,6 @@
 {
   "name": "cyberpsychosis",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "description": "Cyberpsychosis — General-purpose Emergent Gameplay Engine Middleware, SDK, TUI Sandbox, and Visual Web Workbench",
   "author": "PlutoKeating <PlutoKeating@outlook.com>",
@@ -40,11 +40,11 @@
     }
   },
   "dependencies": {
-    "cyberpsychosis-core": "0.1.0",
-    "cyberpsychosis-plugins": "0.1.0",
-    "cyberpsychosis-demo": "0.1.0",
-    "cyberpsychosis-tui": "0.1.0",
-    "cyberpsychosis-web": "0.1.0"
+    "cyberpsychosis-core": "0.2.0",
+    "cyberpsychosis-plugins": "0.2.0",
+    "cyberpsychosis-demo": "0.2.0",
+    "cyberpsychosis-tui": "0.2.0",
+    "cyberpsychosis-web": "0.2.0"
   },
   "publishConfig": {
     "access": "public",

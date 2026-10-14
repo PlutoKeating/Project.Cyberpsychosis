@@ -1,4 +1,4 @@
-# `@emergence/renderer-web` 内部架构
+# `cyberpsychosis-web` 内部架构
 
 ## 模块组成
 

@@ -518,9 +518,9 @@ export class WeatherPlugin implements SimulatorPlugin<EmergenceKernel> {
         "WorldSnapshot rendering protocol and cyberpsychosis-web REST API manual."
       ),
       specs: [
-        { label: L("SNAPSHOT FORMAT", "SNAPSHOT FORMAT"), value: L("Serializable JSON", "Serializable JSON") },
+        { label: L("SNAPSHOT FORMAT", "SNAPSHOT FORMAT"), value: L("Serializable JSON + Hash", "Serializable JSON + Hash") },
         { label: L("HTTP SERVER", "HTTP SERVER"), value: L("Zero-Dep node:http", "Zero-Dep node:http") },
-        { label: L("ENDPOINTS", "ENDPOINTS"), value: L("7 REST Routes", "7 REST Routes") },
+        { label: L("ENDPOINTS", "ENDPOINTS"), value: L("11 REST Routes", "11 REST Routes") },
       ],
       sections: [
         {
@@ -528,8 +528,8 @@ export class WeatherPlugin implements SimulatorPlugin<EmergenceKernel> {
           heading: L("7.1 WorldSnapshot 数据结构", "7.1 WorldSnapshot Contract"),
           paragraphs: [
             L(
-              "所有渲染端只需消费 kernel.getSnapshot() 返回的纯 JSON 快照：",
-              "Every renderer consumes the pure JSON snapshot returned by kernel.getSnapshot():"
+              "所有渲染端只需消费 kernel.getSnapshot() 返回的纯 JSON 快照（内含 32-bit FNV-1a stateHash 确定性状态指纹）：",
+              "Every renderer consumes the pure JSON snapshot returned by kernel.getSnapshot() (including the 32-bit FNV-1a stateHash fingerprint):"
             ),
           ],
           codeBlock: {
@@ -538,6 +538,7 @@ export class WeatherPlugin implements SimulatorPlugin<EmergenceKernel> {
   tick: number;
   seed: number;
   prngState: number;
+  stateHash: string; // e.g. "0x53923965" (32-bit FNV-1a)
   grid: { width: number; height: number };
   entities: SerializedEntity[];
   activeRules: ActiveRuleSummary[];
@@ -557,11 +558,11 @@ export class WeatherPlugin implements SimulatorPlugin<EmergenceKernel> {
         },
         {
           id: "web-workbench-rest-api",
-          heading: L("7.2 Web 工作台 REST 接口", "7.2 Web Workbench REST Endpoints"),
+          heading: L("7.2 Web 工作台与内容工具链 REST 接口", "7.2 Web Workbench & Content Toolchain REST Endpoints"),
           paragraphs: [
             L(
-              "cyberpsychosis-web 提供 7 个标准 HTTP 控制与溯源接口：",
-              "cyberpsychosis-web exposes 7 HTTP endpoints for simulation control and causal inspection:"
+              "cyberpsychosis-web 提供 11 个标准 HTTP 控制、溯源、Prefab 画笔、故事分享与 WorldBundle 热重载接口：",
+              "cyberpsychosis-web exposes 11 HTTP endpoints for simulation control, causal inspection, prefab spawning, story sharing, and WorldBundle hot-reloading:"
             ),
           ],
           table: {
@@ -571,11 +572,15 @@ export class WeatherPlugin implements SimulatorPlugin<EmergenceKernel> {
               L("功能", "Function"),
             ],
             rows: [
-              [L("GET /api/snapshot", "GET /api/snapshot"), L("—", "—"), L("返回当前帧 WorldSnapshot 与可用历史帧列表", "Returns current WorldSnapshot and checkpoint ticks")],
+              [L("GET /api/snapshot", "GET /api/snapshot"), L("—", "—"), L("返回当前帧 WorldSnapshot、历史帧列表与 CoW 增量快照压缩统计", "Returns current WorldSnapshot, checkpoints, and CoW Delta memory stats")],
               [L("POST /api/step", "POST /api/step"), L('{ "count": 5 }', '{ "count": 5 }'), L("推进指定数量的确定性逻辑帧", "Advances N deterministic ticks")],
-              [L("POST /api/rewind", "POST /api/rewind"), L('{ "tick": 2 }', '{ "tick": 2 }'), L("回滚到指定历史 Tick 快照", "Rewinds world state to target checkpoint tick")],
+              [L("POST /api/rewind", "POST /api/rewind"), L('{ "tick": 2 }', '{ "tick": 2 }'), L("通过 CoW 反向增量或关键帧回滚到指定历史 Tick", "Rewinds world state to target tick via CoW delta or keyframe")],
               [L("POST /api/push-word", "POST /api/push-word"), L('{ "preset": "WATER_IS_HOT" }', '{ "preset": "WATER_IS_HOT" }'), L("推动词块触发全局元规则重编译", "Pushes word block to recompile grid meta-rules")],
               [L("POST /api/inject-dsl", "POST /api/inject-dsl"), L('{ "input": "Make smoke calm" }', '{ "input": "Make smoke calm" }'), L("执行 WorldFork 安全预览并注入规则", "Runs WorldFork preview and injects compiled DSL")],
+              [L("POST /api/spawn", "POST /api/spawn"), L('{ "prefabId": "cargo_crate", "x": 4, "y": 4 }', '{ "prefabId": "cargo_crate", "x": 4, "y": 4 }'), L("Prefab 画笔在指定坐标生成新实体并记入回放磁带", "Spawns a prefab at (x,y) and logs into ReplayTape")],
+              [L("POST /api/edit-entity", "POST /api/edit-entity"), L('{ "entityId": 8, "prop": "temp", "value": 40 }', '{ "entityId": 8, "prop": "temp", "value": 40 }'), L("实时修改实体标量属性或增删标签", "Mutates entity properties or tags in real time")],
+              [L("GET|POST /api/replay-tape", "GET|POST /api/replay-tape"), L('{ "encoded": "eyJ2ZXJ..." }', '{ "encoded": "eyJ2ZXJ..." }'), L("导出或重放 Base64URL 确定性故事链接 (?replay=...)", "Exports or replays Base64URL story tapes (?replay=...)")],
+              [L("GET|POST /api/world-bundle", "GET|POST /api/world-bundle"), L('{ "bundle": { ... } }', '{ "bundle": { ... } }'), L("导出或热重载声明式 WorldBundle JSON 世界配置", "Exports or hot-reloads declarative WorldBundle JSON")],
               [L("GET /api/causal/:id", "GET /api/causal/:id"), L("—", "—"), L("查询指定实体或事件的完整因果溯源链", "Traces root-to-leaf CausalLineageReport for target ID")],
               [L("POST /api/reset", "POST /api/reset"), L("{}", "{}"), L("重置沙盒至 Tick 0 初始状态", "Resets Micro Outpost sandbox to Tick 0")],
             ],
@@ -619,12 +624,12 @@ export class WeatherPlugin implements SimulatorPlugin<EmergenceKernel> {
               L("安装命令", "Install Command"),
             ],
             rows: [
-              [L("cyberpsychosis", "cyberpsychosis"), L("0.1.0", "0.1.0"), L("全功能 SDK 重导出与 CLI 总入口", "Umbrella SDK re-export & CLI"), L("npm i cyberpsychosis", "npm i cyberpsychosis")],
-              [L("cyberpsychosis-core", "cyberpsychosis-core"), L("0.1.0", "0.1.0"), L("零外部依赖的确定性涌现内核", "Zero-dependency emergence kernel"), L("npm i cyberpsychosis-core", "npm i cyberpsychosis-core")],
-              [L("cyberpsychosis-plugins", "cyberpsychosis-plugins"), L("0.1.0", "0.1.0"), L("六大标准运行时模拟器插件集", "Six runtime simulator plugins"), L("npm i cyberpsychosis-plugins", "npm i cyberpsychosis-plugins")],
-              [L("cyberpsychosis-demo", "cyberpsychosis-demo"), L("0.1.0", "0.1.0"), L("16×12 微缩生态站验证场景", "16×12 Micro Outpost scenario"), L("npm i cyberpsychosis-demo", "npm i cyberpsychosis-demo")],
-              [L("cyberpsychosis-tui", "cyberpsychosis-tui"), L("0.1.0", "0.1.0"), L("终端 ASCII/ANSI 沙盒渲染器", "Terminal ASCII/ANSI sandbox"), L("npm i -g cyberpsychosis-tui", "npm i -g cyberpsychosis-tui")],
-              [L("cyberpsychosis-web", "cyberpsychosis-web"), L("0.1.0", "0.1.0"), L("Web 涌现实验室工作台与 REST 服务", "Web Visual Workbench & REST server"), L("npm i -g cyberpsychosis-web", "npm i -g cyberpsychosis-web")],
+              [L("cyberpsychosis", "cyberpsychosis"), L("0.2.0", "0.2.0"), L("全功能 SDK 重导出与 CLI 总入口", "Umbrella SDK re-export & CLI"), L("npm i cyberpsychosis", "npm i cyberpsychosis")],
+              [L("cyberpsychosis-core", "cyberpsychosis-core"), L("0.2.0", "0.2.0"), L("确定性涌现内核 (CoW Delta + Lockstep + WorldBundle)", "Deterministic emergence kernel (CoW Delta + Lockstep)"), L("npm i cyberpsychosis-core", "npm i cyberpsychosis-core")],
+              [L("cyberpsychosis-plugins", "cyberpsychosis-plugins"), L("0.2.0", "0.2.0"), L("六大模拟器插件 (含 2D 刚体/桁架关节 & Rapier2D 适配)", "Six simulator plugins (2D rigid-body/joints & Rapier2D adapter)"), L("npm i cyberpsychosis-plugins", "npm i cyberpsychosis-plugins")],
+              [L("cyberpsychosis-demo", "cyberpsychosis-demo"), L("0.2.0", "0.2.0"), L("16×12 微缩生态站验证场景", "16×12 Micro Outpost scenario"), L("npm i cyberpsychosis-demo", "npm i cyberpsychosis-demo")],
+              [L("cyberpsychosis-tui", "cyberpsychosis-tui"), L("0.2.0", "0.2.0"), L("终端 ASCII/ANSI 沙盒渲染器", "Terminal ASCII/ANSI sandbox"), L("npm i -g cyberpsychosis-tui", "npm i -g cyberpsychosis-tui")],
+              [L("cyberpsychosis-web", "cyberpsychosis-web"), L("0.2.0", "0.2.0"), L("Web 涌现实验室工作台与内容工具链服务", "Web Visual Workbench & content toolchain server"), L("npm i -g cyberpsychosis-web", "npm i -g cyberpsychosis-web")],
             ],
           },
         },

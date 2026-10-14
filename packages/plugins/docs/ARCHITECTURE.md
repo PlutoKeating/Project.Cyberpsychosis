@@ -1,4 +1,4 @@
-# `@emergence/plugins` 架构与跨模态交互矩阵
+# `cyberpsychosis-plugins` 架构与跨模态交互矩阵
 
 ## 跨插件解耦交互矩阵
 

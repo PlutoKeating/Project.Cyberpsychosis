@@ -1,6 +1,6 @@
-# `@emergence/renderer-web` — Web 涌现实验室工作台（Emergence Lab Workbench）
+# `cyberpsychosis-web` — Web 涌现实验室工作台（Emergence Lab Workbench）
 
-`@emergence/renderer-web` 是 Emergence Engine 的官方可视化调试与实验工作台。它通过零耦合的 HTTP JSON 快照与因果图谱协议连接 `@emergence/demo-minimal` 与 `@emergence/core`，提供直观的浏览器交互体验。
+`cyberpsychosis-web` 是 Cyberpsychosis 引擎的官方可视化调试与实验工作台。它通过零耦合的 HTTP JSON 快照与因果图谱协议连接 `cyberpsychosis-demo` 与 `cyberpsychosis-core`，提供直观的浏览器交互体验。
 
 ## 核心功能
 

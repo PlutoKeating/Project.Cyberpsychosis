@@ -1,6 +1,6 @@
 {
   "name": "cyberpsychosis-tui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "description": "Cyberpsychosis TUI — Zero-binding ASCII/ANSI terminal renderer and causal lineage inspector",
   "author": "PlutoKeating <PlutoKeating@outlook.com>",
@@ -37,9 +37,9 @@
     }
   },
   "dependencies": {
-    "cyberpsychosis-core": "0.1.0",
-    "cyberpsychosis-plugins": "0.1.0",
-    "cyberpsychosis-demo": "0.1.0"
+    "cyberpsychosis-core": "0.2.0",
+    "cyberpsychosis-plugins": "0.2.0",
+    "cyberpsychosis-demo": "0.2.0"
   },
   "publishConfig": {
     "access": "public",

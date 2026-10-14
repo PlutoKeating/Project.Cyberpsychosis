@@ -1,4 +1,4 @@
-# `@emergence/renderer-tui` 内部架构
+# `cyberpsychosis-tui` 内部架构
 
 ## 模块职责
 

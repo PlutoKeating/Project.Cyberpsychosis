@@ -1,6 +1,6 @@
 {
   "name": "cyberpsychosis-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "description": "Cyberpsychosis Core — Deterministic ECS, Rule-as-Entity compiler, Causal Lineage DAG, and WorldFork time-travel kernel",
   "author": "PlutoKeating <PlutoKeating@outlook.com>",

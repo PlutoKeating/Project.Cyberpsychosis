@@ -1,6 +1,6 @@
-# `@emergence/renderer-tui` — 终端字符界面（ASCII / ANSI TUI）渲染器
+# `cyberpsychosis-tui` — 终端字符界面（ASCII / ANSI TUI）渲染器
 
-`@emergence/renderer-tui` 是 Emergence Engine 的两个官方标配渲染端之一（Dwarf Fortress 风格字符沙盒）。它严格通过 `@emergence/core` 的 `WorldSnapshot` 与 `CausalLineageReport` 零绑定协议消费模拟状态，不包含任何游戏模拟逻辑。
+`cyberpsychosis-tui` 是 Cyberpsychosis 引擎的两个官方标配渲染端之一（Dwarf Fortress 风格字符沙盒）。它严格通过 `cyberpsychosis-core` 的 `WorldSnapshot` 与 `CausalLineageReport` 零绑定协议消费模拟状态，不包含任何游戏模拟逻辑。
 
 ## 启动方式
 
