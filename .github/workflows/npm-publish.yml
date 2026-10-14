@@ -12,32 +12,77 @@ on:
 
 permissions:
   contents: read
+  packages: write
   id-token: write
 
 jobs:
   publish:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: "https://registry.npmjs.org"
       - run: npm ci
       - run: npm run build:packages
       - run: node --test packages/*/dist/**/*.test.js
+
+      - name: Publish to GitHub Packages (npm.pkg.github.com)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DIST_TAG: ${{ inputs.tag || 'latest' }}
+        run: |
+          printf '@plutokeating:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=%s\n' "$GH_TOKEN" > "$RUNNER_TEMP/npmrc-github"
+          node -e '
+            const fs = require("fs");
+            const { execSync } = require("child_process");
+            const pkgs = ["core", "plugins", "demo-minimal", "renderer-tui", "renderer-web", "cyberpsychosis"];
+            const orig = new Map();
+            for (const dir of pkgs) {
+              const p = `./packages/${dir}/package.json`;
+              orig.set(p, fs.readFileSync(p, "utf8"));
+            }
+            try {
+              for (const dir of pkgs) {
+                const p = `./packages/${dir}/package.json`;
+                const data = JSON.parse(orig.get(p));
+                data.name = `@plutokeating/${data.name}`;
+                if (data.dependencies) {
+                  for (const k of Object.keys(data.dependencies)) {
+                    if (k.startsWith("cyberpsychosis")) {
+                      data.dependencies[`@plutokeating/${k}`] = data.dependencies[k];
+                      delete data.dependencies[k];
+                    }
+                  }
+                }
+                data.publishConfig = {
+                  access: "public",
+                  registry: "https://npm.pkg.github.com"
+                };
+                fs.writeFileSync(p, JSON.stringify(data, null, 2) + "\n");
+                execSync(`NPM_CONFIG_USERCONFIG="${process.env.RUNNER_TEMP}/npmrc-github" npm publish ./packages/${dir} --tag "${process.env.DIST_TAG}"`, { stdio: "inherit" });
+              }
+            } finally {
+              for (const [p, content] of orig.entries()) {
+                fs.writeFileSync(p, content);
+              }
+            }
+          '
+
       - name: Publish Cyberpsychosis packages to npmjs.com
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           DIST_TAG: ${{ inputs.tag || 'latest' }}
         run: |
           if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "NPM_TOKEN secret is not configured; running dry-run verification instead."
-            for pkg in core plugins demo-minimal renderer-tui renderer-web cyberpsychosis; do
-              npm publish "./packages/$pkg" --access public --dry-run
-            done
+            echo "NPM_TOKEN secret is not configured; skipping npmjs step (already published or dry-run)."
             exit 0
           fi
+          printf '//registry.npmjs.org/:_authToken=%s\n' "$NODE_AUTH_TOKEN" > "$RUNNER_TEMP/npmrc-npmjs"
           for pkg in core plugins demo-minimal renderer-tui renderer-web cyberpsychosis; do
-            npm publish "./packages/$pkg" --access public --provenance --tag "$DIST_TAG"
+            NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/npmrc-npmjs" npm publish "./packages/$pkg" --access public --provenance --tag "$DIST_TAG"
           done
