@@ -1,0 +1,24 @@
+{
+  "name": "emergence-engine-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "General-purpose Emergent Gameplay Engine Middleware & Visual Workbench",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty",
+    "test": "npm run build && node --test packages/*/dist/**/*.test.js",
+    "start:tui": "npm run build && node packages/renderer-tui/dist/cli.js",
+    "demo:tui": "npm run build && node packages/renderer-tui/dist/cli.js --auto",
+    "start:web": "npm run build && node packages/renderer-web/dist/server.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "typescript": "^5.8.2"
+  }
+}

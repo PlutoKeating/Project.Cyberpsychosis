@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/plugins" },
+    { "path": "packages/demo-minimal" },
+    { "path": "packages/renderer-tui" },
+    { "path": "packages/renderer-web" }
+  ]
+}

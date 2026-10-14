@@ -1,0 +1,17 @@
+{
+  "name": "@emergence/demo-minimal",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@emergence/core": "0.1.0",
+    "@emergence/plugins": "0.1.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@emergence/renderer-web",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/server.js",
+  "types": "./dist/server.d.ts",
+  "dependencies": {
+    "@emergence/core": "0.1.0",
+    "@emergence/plugins": "0.1.0",
+    "@emergence/demo-minimal": "0.1.0"
+  }
+}
