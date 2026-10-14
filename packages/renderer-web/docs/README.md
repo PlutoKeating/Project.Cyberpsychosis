@@ -1,0 +1,17 @@
+# `@emergence/renderer-web` — Web 涌现实验室工作台（Emergence Lab Workbench）
+
+`@emergence/renderer-web` 是 Emergence Engine 的官方可视化调试与实验工作台。它通过零耦合的 HTTP JSON 快照与因果图谱协议连接 `@emergence/demo-minimal` 与 `@emergence/core`，提供直观的浏览器交互体验。
+
+## 核心功能
+
+1. **多图层交互式 2D 画布（Canvas）**：
+   - 底层：16×12 坐标网格与温度场热力渲染；
+   - 中层：物流管网（实线流动/断管告警）与社交信任图（`social_trust` 连线）拓扑叠加；
+   - 顶层：实体符号、状态光环（燃烧/恐慌/镇静）与点选高亮。
+2. **时间旅行控制器（Time-Travel Debugger）**：
+   - 支持单步 Tick、连续步进、自动播放，以及任意历史 Checkpoint 帧滑块回溯（`rewindTo`）。
+3. **跨界涌现触发器与受限 DSL 热编辑台**：
+   - 一键推动词块触发 `[WATER] [IS] [HOT]` 元规则重编译；
+   - 输入自然语言或受限 DSL，实时查看 **WorldFork 平行世界推演报告** 并注入规则。
+4. **因果溯源检查器（Causal Lineage DAG Inspector）**：
+   - 点击画布上任意实体或右侧事件流，实时展开跨领域的完整因果树。
