@@ -24,7 +24,8 @@
     "site:build": "npm --workspace=website run build",
     "site:dev": "npm --workspace=website run preview",
     "site:deploy": "npm --workspace=website run deploy",
-    "publish:dry-run": "npm run build:packages && npm publish --workspaces --if-present --dry-run"
+    "publish:dry-run": "npm run build:packages && npm publish --workspaces --if-present --dry-run",
+    "publish:all": "npm run build:packages && npm publish ./packages/core --access public && npm publish ./packages/plugins --access public && npm publish ./packages/demo-minimal --access public && npm publish ./packages/renderer-tui --access public && npm publish ./packages/renderer-web --access public && npm publish ./packages/cyberpsychosis --access public"
   },
   "engines": {
     "node": ">=20.0.0"
