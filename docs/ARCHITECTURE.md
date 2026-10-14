@@ -73,4 +73,4 @@
 - `cyberpsychosis-demo` **仅依赖** `cyberpsychosis-core` 与 `cyberpsychosis-plugins`。
 - `cyberpsychosis-tui` 与 `cyberpsychosis-web` **仅依赖** `cyberpsychosis-core`、`cyberpsychosis-plugins`、`cyberpsychosis-demo`，二者之间完全独立。
 - `cyberpsychosis` 聚合导出上述 5 个子包并提供统一 CLI。
-- `website/` 独立维护项目的宣传页面、8 章多页面技术文档及合规法律页面（About / Terms / Privacy），通过 `designSystem.ts` 与 `lint-tokens.ts` 强制保证零硬编码视觉参数，并部署于 Cloudflare Worker `cyberpsychosis`。
+- `website/` 独立维护项目的五阶段视觉化宣传页面、8 章配图技术文档及合规法律页面（About / Terms / Privacy），每个页面与组件均配对独立的 `*.i18n.ts` 多语言字典（内置中文与英文，预留多语种扩展脚手架），通过 `designSystem.ts` 与 `lint-tokens.ts` 强制保证零硬编码视觉参数与零硬编码页面文案，并部署于 Cloudflare Worker `cyberpsychosis`。

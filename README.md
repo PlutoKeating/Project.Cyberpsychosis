@@ -30,7 +30,7 @@
    - `cyberpsychosis-tui`：终端 ANSI/ASCII 实时交互沙盒与因果检查器。
    - `cyberpsychosis-web`：浏览器端多图层 Canvas 画布、时间轴控制器、因果图溯源面板、WorldFork 预览与实时 DSL 编辑器。
 7. **官方宣传与多章节文档站（`website/`）**
-   - 托管于 Cloudflare Workers（Worker 名称：`cyberpsychosis`），全站复用 `plutokeating.beer` 设计系统（构建期强制零硬编码视觉参数校验），包含 Landing Page、8 章多页面技术文档、关于我们、服务条款与隐私政策。
+   - 托管于 Cloudflare Workers（Worker 名称：`cyberpsychosis`），全站复用 `plutokeating.beer` 设计系统与模块化 `*.i18n.ts` 中英双语架构（构建期强制零硬编码视觉参数与零硬编码页面文案校验），包含五阶段视觉化 Landing Page（H5 实时涌现画布、SVG 六维因果图、双端真实运行截图画廊、六大机制动效卡片、四层架构蓝图）、8 章配图技术文档、关于我们、服务条款与隐私政策。
 
 ---
 
