@@ -7,6 +7,7 @@
   "description": "Cyberpsychosis official promotional & documentation website hosted on Cloudflare Workers",
   "scripts": {
     "tokens": "node --experimental-strip-types --no-warnings scripts/gen-tokens.ts",
+    "screenshots": "node --experimental-strip-types --no-warnings scripts/gen-screenshots.ts",
     "lint:tokens": "node --experimental-strip-types --no-warnings scripts/lint-tokens.ts",
     "build": "npm run tokens && npm run lint:tokens && node --experimental-strip-types --no-warnings scripts/build-site.ts && npx @tailwindcss/cli -i src/design-system/input.css -o dist/style.css --minify",
     "check": "npm run lint:tokens && tsc --noEmit",

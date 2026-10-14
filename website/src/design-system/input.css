@@ -25,6 +25,13 @@
   }
 }
 
+/* Multi-language i18n zero-flicker visibility rules */
+html:not([data-lang]) [data-lang-code]:not([data-lang-code="zh"]),
+html[data-lang="zh"] [data-lang-code]:not([data-lang-code="zh"]),
+html[data-lang="en"] [data-lang-code]:not([data-lang-code="en"]) {
+  display: none !important;
+}
+
 /* plutokeating.beer 经典视觉构件与 Cyberpsychosis 专属变体（100% 引用设计系统变量） */
 .cyber-grid {
   background-image:
@@ -116,6 +123,66 @@
   opacity: 0;
   clip-path: inset(40% 0 48% 0);
   animation: cyber-glitch 8s steps(1) infinite;
+}
+
+/* SVG & H5 Interactive Diagram Animations */
+.svg-flow {
+  stroke-dasharray: 8 6;
+  animation: svg-dash-flow 2.4s linear infinite;
+}
+
+.svg-flow-fast {
+  stroke-dasharray: 6 5;
+  animation: svg-dash-flow 1.2s linear infinite;
+}
+
+.svg-pulse-node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ds-breath var(--ds-duration-breath) var(--ds-ease-breath) infinite;
+}
+
+.svg-shockwave {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: svg-wave-pulse 3.2s var(--ds-ease-standard) infinite;
+}
+
+.svg-word-slide {
+  animation: svg-block-shift 4.8s var(--ds-ease-emphasized) infinite;
+}
+
+@keyframes svg-dash-flow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+@keyframes svg-wave-pulse {
+  0% {
+    opacity: var(--ds-opacity-hover);
+    transform: scale(0.82);
+  }
+  70% {
+    opacity: var(--ds-opacity-halo-light);
+    transform: scale(1.16);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.22);
+  }
+}
+
+@keyframes svg-block-shift {
+  0%, 20% {
+    transform: translateY(24px);
+  }
+  35%, 80% {
+    transform: translateY(0);
+  }
+  95%, 100% {
+    transform: translateY(24px);
+  }
 }
 
 @keyframes cyber-cursor {
