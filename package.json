@@ -21,6 +21,7 @@
     "start:tui": "npm run build:packages && node packages/renderer-tui/dist/cli.js",
     "demo:tui": "npm run build:packages && node packages/renderer-tui/dist/cli.js --auto",
     "start:web": "npm run build:packages && node packages/renderer-web/dist/server.js",
+    "bench": "npm run build:packages && node packages/core/dist/bench.js",
     "site:build": "npm --workspace=website run build",
     "site:dev": "npm --workspace=website run preview",
     "site:deploy": "npm --workspace=website run deploy",

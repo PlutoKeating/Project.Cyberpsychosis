@@ -8,3 +8,5 @@ export * from "./grammar.js";
 export * from "./semantics.js";
 export * from "./rules.js";
 export * from "./kernel.js";
+export * from "./lockstep.js";
+export * from "./bench.js";

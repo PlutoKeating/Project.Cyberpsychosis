@@ -6,6 +6,12 @@ export interface InternalCausalState {
   lastCauseByEntity: Array<[EntityId, string]>;
 }
 
+export interface CausalFrameDelta {
+  prevNextSeq: number;
+  addedNodeIds: string[];
+  prevLastCauseByEntity: Array<[EntityId, string | undefined]>;
+}
+
 /**
  * First-class Causal Event Bus & Directed Acyclic Graph (Causal DAG) tracker.
  * Automatically stitches cross-domain events by tracking the latest causal node that mutated each entity.
@@ -14,6 +20,55 @@ export class CausalTracker {
   private nextSeq = 1;
   private nodes = new Map<string, CausalNode>();
   private lastCauseByEntity = new Map<EntityId, string>();
+
+  // Copy-on-Write frame delta tracking
+  private trackingDelta = false;
+  private deltaPrevNextSeq = 1;
+  private deltaAddedNodeIds: string[] = [];
+  private deltaPrevLastCause = new Map<EntityId, string | undefined>();
+
+  beginDeltaTracking(): void {
+    this.trackingDelta = true;
+    this.deltaPrevNextSeq = this.nextSeq;
+    this.deltaAddedNodeIds = [];
+    this.deltaPrevLastCause.clear();
+  }
+
+  flushDelta(): CausalFrameDelta {
+    const delta: CausalFrameDelta = {
+      prevNextSeq: this.deltaPrevNextSeq,
+      addedNodeIds: [...this.deltaAddedNodeIds],
+      prevLastCauseByEntity: Array.from(this.deltaPrevLastCause.entries()),
+    };
+    this.trackingDelta = false;
+    this.deltaAddedNodeIds = [];
+    this.deltaPrevLastCause.clear();
+    return delta;
+  }
+
+  rollbackDelta(delta: CausalFrameDelta): void {
+    const wasTracking = this.trackingDelta;
+    this.trackingDelta = false;
+    for (const id of delta.addedNodeIds) {
+      this.nodes.delete(id);
+    }
+    for (const [eid, prevCause] of delta.prevLastCauseByEntity) {
+      if (prevCause === undefined) {
+        this.lastCauseByEntity.delete(eid);
+      } else {
+        this.lastCauseByEntity.set(eid, prevCause);
+      }
+    }
+    this.nextSeq = delta.prevNextSeq;
+    this.trackingDelta = wasTracking;
+  }
+
+  private captureLastCause(entityId: EntityId): void {
+    if (!this.trackingDelta) return;
+    if (!this.deltaPrevLastCause.has(entityId)) {
+      this.deltaPrevLastCause.set(entityId, this.lastCauseByEntity.get(entityId));
+    }
+  }
 
   recordEvent(input: {
     tick: number;
@@ -45,9 +100,13 @@ export class CausalTracker {
     };
 
     this.nodes.set(id, node);
+    if (this.trackingDelta) {
+      this.deltaAddedNodeIds.push(id);
+    }
 
     // Update latest cause pointer for all affected entities
     for (const entityId of input.subjectIds) {
+      this.captureLastCause(entityId);
       this.lastCauseByEntity.set(entityId, id);
     }
 
@@ -59,6 +118,7 @@ export class CausalTracker {
   }
 
   setLastCauseForEntity(entityId: EntityId, causeId: string): void {
+    this.captureLastCause(entityId);
     this.lastCauseByEntity.set(entityId, causeId);
   }
 

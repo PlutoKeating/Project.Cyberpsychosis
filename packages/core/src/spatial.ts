@@ -31,14 +31,7 @@ export class MultiModalSpatialIndex {
   }
 
   getEntitiesAtGrid(ecs: DeterministicECS, gx: number, gy: number): EntityId[] {
-    const result: EntityId[] = [];
-    for (const id of ecs.getAllEntityIds()) {
-      const e = ecs.getEntity(id)!;
-      if (Math.round(e.x) === gx && Math.round(e.y) === gy) {
-        result.push(id);
-      }
-    }
-    return result;
+    return ecs.getEntityIdsAtCell(gx, gy);
   }
 
   getGridNeighbors(
@@ -74,23 +67,34 @@ export class MultiModalSpatialIndex {
       const nx = gx + dx;
       const ny = gy + dy;
       if (!this.inBounds(nx, ny)) continue;
-      result.push(...this.getEntitiesAtGrid(ecs, nx, ny));
+      result.push(...ecs.getEntityIdsAtCell(nx, ny));
     }
     return result;
   }
 
   queryRadius(ecs: DeterministicECS, cx: number, cy: number, radius: number): EntityId[] {
     const rSq = radius * radius;
-    const result: EntityId[] = [];
-    for (const id of ecs.getAllEntityIds()) {
-      const e = ecs.getEntity(id)!;
-      const dx = e.x - cx;
-      const dy = e.y - cy;
-      if (dx * dx + dy * dy <= rSq) {
-        result.push(id);
+    const minGx = Math.max(0, Math.floor(cx - radius - 1));
+    const maxGx = Math.min(this.width - 1, Math.ceil(cx + radius + 1));
+    const minGy = Math.max(0, Math.floor(cy - radius - 1));
+    const maxGy = Math.min(this.height - 1, Math.ceil(cy + radius + 1));
+
+    const candidates: EntityId[] = [];
+    for (let gy = minGy; gy <= maxGy; gy++) {
+      for (let gx = minGx; gx <= maxGx; gx++) {
+        const cellIds = ecs.getEntityIdsAtCell(gx, gy);
+        for (const id of cellIds) {
+          const e = ecs.getEntity(id);
+          if (!e) continue;
+          const dx = e.x - cx;
+          const dy = e.y - cy;
+          if (dx * dx + dy * dy <= rSq) {
+            candidates.push(id);
+          }
+        }
       }
     }
-    return result;
+    return candidates.sort((a, b) => a - b);
   }
 
   addEdge(edge: {

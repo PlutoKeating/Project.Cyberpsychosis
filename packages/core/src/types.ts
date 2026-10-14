@@ -186,6 +186,7 @@ export interface WorldSnapshot {
   tick: number;
   seed: number;
   prngState: number;
+  stateHash: string;
   grid: {
     width: number;
     height: number;
@@ -220,6 +221,83 @@ export interface KernelConfig {
   gridWidth?: number;
   gridHeight?: number;
   snapshotHistoryLimit?: number;
+  keyframeInterval?: number;
+}
+
+export type ReplayCommand =
+  | {
+      tick: number;
+      type: "push";
+      entityId: EntityId;
+      dx: number;
+      dy: number;
+      reason?: string;
+    }
+  | {
+      tick: number;
+      type: "dsl";
+      dslText: string;
+    }
+  | {
+      tick: number;
+      type: "spawn";
+      prefabId: string;
+      x: number;
+      y: number;
+      name?: string;
+    }
+  | {
+      tick: number;
+      type: "set_prop";
+      entityId: EntityId;
+      prop: string;
+      value: number;
+    }
+  | {
+      tick: number;
+      type: "add_tag";
+      entityId: EntityId;
+      tag: string;
+    }
+  | {
+      tick: number;
+      type: "remove_tag";
+      entityId: EntityId;
+      tag: string;
+    };
+
+export interface ReplayTape {
+  version: 1;
+  seed: number;
+  finalTick: number;
+  expectedStateHash: string;
+  commands: ReplayCommand[];
+}
+
+export interface WorldBundle {
+  version: 1;
+  name: string;
+  description?: string;
+  seed: number;
+  grid: {
+    width: number;
+    height: number;
+  };
+  properties: PropertyDefinition[];
+  prefabs: PrefabDefinition[];
+  entities: SerializedEntity[];
+  graphEdges: SerializedGraphEdge[];
+  rules: DeclarativeRule[];
+  overrides?: GlobalTagOverride[];
+}
+
+export interface SnapshotMemoryStats {
+  totalCheckpoints: number;
+  keyframeCount: number;
+  deltaFrameCount: number;
+  estimatedDeltaBytes: number;
+  estimatedFullEquivalentBytes: number;
+  compressionRatio: number;
 }
 
 export interface SimulatorPlugin<TKernel = unknown> {
@@ -228,4 +306,6 @@ export interface SimulatorPlugin<TKernel = unknown> {
   readonly tickInterval?: number;
   setup?(kernel: TKernel): void;
   onTick(kernel: TKernel, tick: number): void;
+  exportPluginState?(): unknown;
+  importPluginState?(state: unknown): void;
 }
