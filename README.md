@@ -74,3 +74,10 @@ npm run start:tui
 # 4. 启动 Web 涌现实验室工作台 (默认 http://localhost:4173)
 npm run start:web
 ```
+
+---
+
+## 开源许可
+
+本项目采用 [Apache License 2.0](./LICENSE) 开源许可协议。
+
