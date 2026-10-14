@@ -1,0 +1,18 @@
+// Cloudflare Worker configuration for the Cyberpsychosis promotional & documentation website.
+// Worker name "cyberpsychosis" matches the Cloudflare Workers project bound to PlutoKeating/Project.Cyberpsychosis.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cyberpsychosis",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"],
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

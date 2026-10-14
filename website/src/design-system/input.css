@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@import "./tokens.generated.css";
+
+@source "../**/*.ts";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    color-scheme: dark;
+  }
+  body {
+    min-width: 280px;
+  }
+  ::selection {
+    background: var(--color-selection);
+    color: var(--color-fg-display);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent-hover);
+    outline-offset: 4px;
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* plutokeating.beer 经典视觉构件与 Cyberpsychosis 专属变体（100% 引用设计系统变量） */
+.cyber-grid {
+  background-image:
+    linear-gradient(to right, var(--ds-color-cyber-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--ds-color-cyber-grid-line) 1px, transparent 1px),
+    radial-gradient(circle at 76% 24%, var(--ds-color-accent-glow-faint), transparent 35%);
+  background-size: 68px 68px, 68px 68px, 100% 100%;
+  mask-image: linear-gradient(var(--ds-color-fg), transparent 95%);
+}
+
+.clip-small {
+  clip-path: var(--ds-clip-small);
+}
+.clip-button {
+  clip-path: var(--ds-clip-button);
+}
+.clip-panel {
+  clip-path: var(--ds-clip-panel);
+}
+.clip-hero {
+  clip-path: var(--ds-clip-hero);
+}
+
+.project-card {
+  position: relative;
+}
+.project-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 38px;
+  height: 3px;
+  background: var(--ds-color-accent-hover);
+  transition: width var(--ds-duration-slow) var(--ds-ease-standard);
+  box-shadow: var(--ds-shadow-glow);
+}
+.project-card--featured::before {
+  width: 86px;
+  background: var(--ds-color-accent);
+}
+.project-card:hover::before {
+  width: 100%;
+}
+.project-card::after {
+  content: "+";
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  color: var(--ds-color-accent-glow);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-lg);
+}
+
+.cyber-terminal {
+  clip-path: var(--ds-clip-panel);
+  position: relative;
+}
+.cyber-terminal::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 120px;
+  height: 2px;
+  background: var(--ds-color-accent);
+  box-shadow: var(--ds-shadow-glow);
+}
+
+.signal-dot {
+  box-shadow: var(--ds-shadow-glow);
+  animation: ds-breath var(--ds-duration-breath) var(--ds-ease-breath) infinite;
+}
+
+.cursor-blink {
+  animation: cyber-cursor 1.1s steps(1) infinite;
+}
+
+.glitch-text {
+  position: relative;
+  text-shadow: var(--ds-text-shadow-glitch);
+}
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--ds-color-fg);
+  opacity: 0;
+  clip-path: inset(40% 0 48% 0);
+  animation: cyber-glitch 8s steps(1) infinite;
+}
+
+@keyframes cyber-cursor {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes cyber-glitch {
+  0%, 94%, 96%, 98%, 100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  95%, 97% {
+    opacity: var(--ds-opacity-pattern);
+    transform: translateX(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

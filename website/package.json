@@ -1,0 +1,24 @@
+{
+  "name": "cyberpsychosis-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "Cyberpsychosis official promotional & documentation website hosted on Cloudflare Workers",
+  "scripts": {
+    "tokens": "node --experimental-strip-types --no-warnings scripts/gen-tokens.ts",
+    "lint:tokens": "node --experimental-strip-types --no-warnings scripts/lint-tokens.ts",
+    "build": "npm run tokens && npm run lint:tokens && node --experimental-strip-types --no-warnings scripts/build-site.ts && npx @tailwindcss/cli -i src/design-system/input.css -o dist/style.css --minify",
+    "check": "npm run lint:tokens && tsc --noEmit",
+    "test": "npm run build && node --experimental-strip-types --no-warnings --test src/site.test.ts",
+    "preview": "npm run build && npx wrangler dev",
+    "deploy": "npm run build && npx wrangler deploy"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "@types/node": "^22.13.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.8.2",
+    "wrangler": "^4.14.0"
+  }
+}
