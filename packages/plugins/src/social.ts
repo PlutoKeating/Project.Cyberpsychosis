@@ -61,7 +61,7 @@ export class SocialAgentPlugin implements SimulatorPlugin<EmergenceKernel> {
         }
       } else if (hazardScore > 0) {
         ecs.addProp(agentId, "panic", hazardScore);
-        if (hazardCauses.length > 0) {
+        if (hazardCauses.length > 0 && !ecs.hasTag(agentId, "panicked")) {
           causal.setLastCauseForEntity(agentId, hazardCauses[0]);
         }
       } else {
