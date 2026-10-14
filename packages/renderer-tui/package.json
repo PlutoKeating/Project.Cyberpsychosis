@@ -1,16 +1,48 @@
 {
-  "name": "@emergence/renderer-tui",
+  "name": "cyberpsychosis-tui",
   "version": "0.1.0",
   "license": "Apache-2.0",
+  "description": "Cyberpsychosis TUI — Zero-binding ASCII/ANSI terminal renderer and causal lineage inspector",
+  "author": "PlutoKeating <PlutoKeating@outlook.com>",
+  "homepage": "https://cyberpsychosis.plutokeating.beer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PlutoKeating/Project.Cyberpsychosis.git",
+    "directory": "packages/renderer-tui"
+  },
+  "bugs": {
+    "url": "https://github.com/PlutoKeating/Project.Cyberpsychosis/issues"
+  },
+  "keywords": [
+    "cyberpsychosis",
+    "tui",
+    "ascii",
+    "emergent-gameplay"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "docs"
+  ],
   "bin": {
-    "emergence-tui": "./dist/cli.js"
+    "cyberpsychosis-tui": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "dependencies": {
-    "@emergence/core": "0.1.0",
-    "@emergence/plugins": "0.1.0",
-    "@emergence/demo-minimal": "0.1.0"
+    "cyberpsychosis-core": "0.1.0",
+    "cyberpsychosis-plugins": "0.1.0",
+    "cyberpsychosis-demo": "0.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

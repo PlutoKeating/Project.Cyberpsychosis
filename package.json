@@ -1,19 +1,30 @@
 {
-  "name": "emergence-engine-monorepo",
+  "name": "cyberpsychosis-monorepo",
   "version": "0.1.0",
   "private": true,
   "license": "Apache-2.0",
-  "description": "General-purpose Emergent Gameplay Engine Middleware & Visual Workbench",
+  "description": "Cyberpsychosis — General-purpose Emergent Gameplay Engine Middleware, SDK & Visual Workbench",
+  "homepage": "https://cyberpsychosis.plutokeating.beer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PlutoKeating/Project.Cyberpsychosis.git"
+  },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "website"
   ],
   "scripts": {
-    "build": "tsc -b",
-    "typecheck": "tsc -b --pretty",
-    "test": "npm run build && node --test packages/*/dist/**/*.test.js",
-    "start:tui": "npm run build && node packages/renderer-tui/dist/cli.js",
-    "demo:tui": "npm run build && node packages/renderer-tui/dist/cli.js --auto",
-    "start:web": "npm run build && node packages/renderer-web/dist/server.js"
+    "build": "tsc -b && npm --workspace=website run build",
+    "build:packages": "tsc -b",
+    "typecheck": "tsc -b --pretty && npm --workspace=website run check",
+    "test": "npm run build:packages && node --test packages/*/dist/**/*.test.js && npm --workspace=website run test",
+    "start:tui": "npm run build:packages && node packages/renderer-tui/dist/cli.js",
+    "demo:tui": "npm run build:packages && node packages/renderer-tui/dist/cli.js --auto",
+    "start:web": "npm run build:packages && node packages/renderer-web/dist/server.js",
+    "site:build": "npm --workspace=website run build",
+    "site:dev": "npm --workspace=website run preview",
+    "site:deploy": "npm --workspace=website run deploy",
+    "publish:dry-run": "npm run build:packages && npm publish --workspaces --if-present --dry-run"
   },
   "engines": {
     "node": ">=20.0.0"

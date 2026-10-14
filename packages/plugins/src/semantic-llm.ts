@@ -2,7 +2,7 @@ import {
   EmergenceKernel,
   ForkPredictionResult,
   SimulatorPlugin,
-} from "@emergence/core";
+} from "cyberpsychosis-core";
 
 export interface SemanticTranslationResult {
   originalInput: string;

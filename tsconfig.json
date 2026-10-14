@@ -5,6 +5,7 @@
     { "path": "packages/plugins" },
     { "path": "packages/demo-minimal" },
     { "path": "packages/renderer-tui" },
-    { "path": "packages/renderer-web" }
+    { "path": "packages/renderer-web" },
+    { "path": "packages/cyberpsychosis" }
   ]
 }

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { EmergenceKernel } from "./index.js";
 
-describe("@emergence/core — EmergenceKernel & Five-Dimensional Primitives", () => {
+describe("cyberpsychosis-core — EmergenceKernel & Five-Dimensional Primitives", () => {
   it("enforces property bounds, deterministic ECS ordering, and time-travel rewind", () => {
     const kernel = new EmergenceKernel({ seed: 42, gridWidth: 8, gridHeight: 8 });
     kernel.vocabulary.registerProperty(kernel.ecs, {

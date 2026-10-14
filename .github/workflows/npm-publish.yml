@@ -1,0 +1,43 @@
+name: npm-publish
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Dist-tag for npm publish (e.g. latest or next)"
+        required: false
+        default: "latest"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm run build:packages
+      - run: node --test packages/*/dist/**/*.test.js
+      - name: Publish Cyberpsychosis packages to npmjs.com
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          DIST_TAG: ${{ inputs.tag || 'latest' }}
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "NPM_TOKEN secret is not configured; running dry-run verification instead."
+            for pkg in core plugins demo-minimal renderer-tui renderer-web cyberpsychosis; do
+              npm publish "./packages/$pkg" --access public --dry-run
+            done
+            exit 0
+          fi
+          for pkg in core plugins demo-minimal renderer-tui renderer-web cyberpsychosis; do
+            npm publish "./packages/$pkg" --access public --provenance --tag "$DIST_TAG"
+          done

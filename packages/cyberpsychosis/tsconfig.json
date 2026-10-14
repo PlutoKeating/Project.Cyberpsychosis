@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "references": [
+    { "path": "../core" },
+    { "path": "../plugins" },
+    { "path": "../demo-minimal" },
+    { "path": "../renderer-tui" },
+    { "path": "../renderer-web" }
+  ],
+  "include": ["src/**/*"]
+}

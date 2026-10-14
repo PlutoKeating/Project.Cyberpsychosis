@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import http from "node:http";
 import { fileURLToPath } from "node:url";
-import { createOutpostSandbox, OutpostSandbox } from "@emergence/demo-minimal";
+import { createOutpostSandbox, OutpostSandbox } from "cyberpsychosis-demo";
 import { getWorkbenchHtml } from "./workbench-html.js";
 
 function readJsonBody(req: http.IncomingMessage): Promise<Record<string, unknown>> {
@@ -137,9 +137,9 @@ export function createWorkbenchServer(initialSeed = 20261014): {
 // Start HTTP server if invoked directly via CLI
 const currentFile = fileURLToPath(import.meta.url);
 if (process.argv[1] && process.argv[1] === currentFile) {
-  const port = Number(process.env.EMERGENCE_WEB_PORT ?? 4173);
+  const port = Number(process.env.CYBERPSYCHOSIS_WEB_PORT ?? process.env.EMERGENCE_WEB_PORT ?? 4173);
   const { server } = createWorkbenchServer();
   server.listen(port, () => {
-    console.log(`Emergence Engine Web Workbench listening on http://localhost:${port}`);
+    console.log(`Cyberpsychosis Engine Web Workbench listening on http://localhost:${port}`);
   });
 }

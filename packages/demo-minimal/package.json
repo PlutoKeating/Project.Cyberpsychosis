@@ -1,10 +1,32 @@
 {
-  "name": "@emergence/demo-minimal",
+  "name": "cyberpsychosis-demo",
   "version": "0.1.0",
   "license": "Apache-2.0",
+  "description": "Cyberpsychosis Minimal Verification Demo — 16x12 Micro Outpost cross-domain emergence sandbox",
+  "author": "PlutoKeating <PlutoKeating@outlook.com>",
+  "homepage": "https://cyberpsychosis.plutokeating.beer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PlutoKeating/Project.Cyberpsychosis.git",
+    "directory": "packages/demo-minimal"
+  },
+  "bugs": {
+    "url": "https://github.com/PlutoKeating/Project.Cyberpsychosis/issues"
+  },
+  "keywords": [
+    "cyberpsychosis",
+    "emergent-gameplay",
+    "sandbox",
+    "simulation"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "docs"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -12,7 +34,11 @@
     }
   },
   "dependencies": {
-    "@emergence/core": "0.1.0",
-    "@emergence/plugins": "0.1.0"
+    "cyberpsychosis-core": "0.1.0",
+    "cyberpsychosis-plugins": "0.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

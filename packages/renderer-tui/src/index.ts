@@ -2,7 +2,7 @@ import {
   CausalLineageReport,
   SerializedEntity,
   WorldSnapshot,
-} from "@emergence/core";
+} from "cyberpsychosis-core";
 
 export interface AsciiRenderOptions {
   ansi?: boolean;
@@ -82,7 +82,7 @@ export function renderSnapshotToAscii(
   const lines: string[] = [];
   const border = "+" + "-".repeat(width * 2 + 1) + "+";
   lines.push(
-    `=== EMERGENCE ENGINE TUI | Tick: ${snapshot.tick} | Seed: ${snapshot.seed} ===`
+    `=== CYBERPSYCHOSIS ENGINE TUI | Tick: ${snapshot.tick} | Seed: ${snapshot.seed} ===`
   );
   lines.push(
     `Metrics: Entities=${snapshot.metrics.entityCount} | Burning=${snapshot.metrics.burningCount} | Panicked=${snapshot.metrics.panickedAgentCount} | BrokenPipes=${snapshot.metrics.brokenPipeCount} | Flow=${snapshot.metrics.logisticsThroughput}`

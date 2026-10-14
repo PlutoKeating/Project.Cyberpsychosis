@@ -1,10 +1,34 @@
 {
-  "name": "@emergence/plugins",
+  "name": "cyberpsychosis-plugins",
   "version": "0.1.0",
   "license": "Apache-2.0",
+  "description": "Cyberpsychosis Runtime Plugins — Chemistry CA, 2D Physics, Baba-style Logic, Logistics Flow, Social Utility AI, and Semantic LLM-to-DSL Bridge",
+  "author": "PlutoKeating <PlutoKeating@outlook.com>",
+  "homepage": "https://cyberpsychosis.plutokeating.beer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PlutoKeating/Project.Cyberpsychosis.git",
+    "directory": "packages/plugins"
+  },
+  "bugs": {
+    "url": "https://github.com/PlutoKeating/Project.Cyberpsychosis/issues"
+  },
+  "keywords": [
+    "cyberpsychosis",
+    "emergent-gameplay",
+    "cellular-automata",
+    "utility-ai",
+    "baba-is-you",
+    "llm-dsl"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "docs"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -12,6 +36,10 @@
     }
   },
   "dependencies": {
-    "@emergence/core": "0.1.0"
+    "cyberpsychosis-core": "0.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

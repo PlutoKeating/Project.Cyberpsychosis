@@ -1,4 +1,4 @@
-import { EmergenceKernel, SimulatorPlugin } from "@emergence/core";
+import { EmergenceKernel, SimulatorPlugin } from "cyberpsychosis-core";
 
 /**
  * Plugin 4: Logistics & Directed Flow Network Solver (Factorio style).

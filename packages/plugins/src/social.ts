@@ -1,4 +1,4 @@
-import { EmergenceKernel, SimulatorPlugin } from "@emergence/core";
+import { EmergenceKernel, SimulatorPlugin } from "cyberpsychosis-core";
 
 /**
  * Plugin 5: Social & Agent Utility AI Simulator (RimWorld / Dwarf Fortress style).

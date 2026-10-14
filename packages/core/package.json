@@ -1,14 +1,42 @@
 {
-  "name": "@emergence/core",
+  "name": "cyberpsychosis-core",
   "version": "0.1.0",
   "license": "Apache-2.0",
+  "description": "Cyberpsychosis Core — Deterministic ECS, Rule-as-Entity compiler, Causal Lineage DAG, and WorldFork time-travel kernel",
+  "author": "PlutoKeating <PlutoKeating@outlook.com>",
+  "homepage": "https://cyberpsychosis.plutokeating.beer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PlutoKeating/Project.Cyberpsychosis.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/PlutoKeating/Project.Cyberpsychosis/issues"
+  },
+  "keywords": [
+    "cyberpsychosis",
+    "emergent-gameplay",
+    "ecs",
+    "game-engine",
+    "causal-dag",
+    "deterministic-simulation"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "docs"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

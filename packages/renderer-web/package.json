@@ -1,13 +1,48 @@
 {
-  "name": "@emergence/renderer-web",
+  "name": "cyberpsychosis-web",
   "version": "0.1.0",
   "license": "Apache-2.0",
+  "description": "Cyberpsychosis Web Workbench — Multi-layer 2D canvas, time-travel debugger, WorldFork predictor, and Causal DAG inspector",
+  "author": "PlutoKeating <PlutoKeating@outlook.com>",
+  "homepage": "https://cyberpsychosis.plutokeating.beer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PlutoKeating/Project.Cyberpsychosis.git",
+    "directory": "packages/renderer-web"
+  },
+  "bugs": {
+    "url": "https://github.com/PlutoKeating/Project.Cyberpsychosis/issues"
+  },
+  "keywords": [
+    "cyberpsychosis",
+    "workbench",
+    "time-travel-debugger",
+    "emergent-gameplay"
+  ],
   "type": "module",
   "main": "./dist/server.js",
   "types": "./dist/server.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "docs"
+  ],
+  "bin": {
+    "cyberpsychosis-web": "dist/server.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    }
+  },
   "dependencies": {
-    "@emergence/core": "0.1.0",
-    "@emergence/plugins": "0.1.0",
-    "@emergence/demo-minimal": "0.1.0"
+    "cyberpsychosis-core": "0.1.0",
+    "cyberpsychosis-plugins": "0.1.0",
+    "cyberpsychosis-demo": "0.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

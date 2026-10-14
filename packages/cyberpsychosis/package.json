@@ -1,0 +1,53 @@
+{
+  "name": "cyberpsychosis",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "description": "Cyberpsychosis — General-purpose Emergent Gameplay Engine Middleware, SDK, TUI Sandbox, and Visual Web Workbench",
+  "author": "PlutoKeating <PlutoKeating@outlook.com>",
+  "homepage": "https://cyberpsychosis.plutokeating.beer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PlutoKeating/Project.Cyberpsychosis.git",
+    "directory": "packages/cyberpsychosis"
+  },
+  "bugs": {
+    "url": "https://github.com/PlutoKeating/Project.Cyberpsychosis/issues"
+  },
+  "keywords": [
+    "cyberpsychosis",
+    "emergent-gameplay",
+    "game-engine",
+    "ecs",
+    "causal-dag",
+    "baba-is-you",
+    "cellular-automata"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "docs"
+  ],
+  "bin": {
+    "cyberpsychosis": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "cyberpsychosis-core": "0.1.0",
+    "cyberpsychosis-plugins": "0.1.0",
+    "cyberpsychosis-demo": "0.1.0",
+    "cyberpsychosis-tui": "0.1.0",
+    "cyberpsychosis-web": "0.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

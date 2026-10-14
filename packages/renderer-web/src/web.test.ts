@@ -3,7 +3,7 @@ import { AddressInfo } from "node:net";
 import { describe, it } from "node:test";
 import { createWorkbenchServer } from "./server.js";
 
-describe("@emergence/renderer-web — Workbench HTTP Server & REST Protocol", () => {
+describe("cyberpsychosis-web — Workbench HTTP Server & REST Protocol", () => {
   it("serves workbench HTML, steps simulation, pushes word blocks, injects DSL with WorldFork preview, and traces Causal DAG", async () => {
     const { server } = createWorkbenchServer(20261014);
     await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
@@ -15,7 +15,7 @@ describe("@emergence/renderer-web — Workbench HTTP Server & REST Protocol", ()
       const htmlRes = await fetch(`${baseUrl}/`);
       assert.equal(htmlRes.status, 200);
       const html = await htmlRes.text();
-      assert.equal(html.includes("EMERGENCE ENGINE WORKBENCH"), true);
+      assert.equal(html.includes("CYBERPSYCHOSIS WORKBENCH"), true);
 
       // 2. Push word block [WATER IS HOT] and step 5 ticks
       const pushRes = await fetch(`${baseUrl}/api/push-word`, {

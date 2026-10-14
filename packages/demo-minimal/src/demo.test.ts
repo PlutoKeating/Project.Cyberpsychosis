@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { createOutpostSandbox } from "./index.js";
 
-describe("@emergence/demo-minimal — Cross-Domain Emergent Cascade & Semantic Recovery", () => {
+describe("cyberpsychosis-demo — Cross-Domain Emergent Cascade & Semantic Recovery", () => {
   it("runs stable outpost cooling under [WATER IS COOL], then cascades across all 6 domains when [WATER IS HOT] is pushed", () => {
     const sandbox = createOutpostSandbox(20261014);
     const { kernel, entities } = sandbox;

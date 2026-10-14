@@ -1,4 +1,4 @@
-import { EmergenceKernel, SimulatorPlugin } from "@emergence/core";
+import { EmergenceKernel, SimulatorPlugin } from "cyberpsychosis-core";
 
 /**
  * Plugin 1: Chemistry / Elemental Cellular Automata Simulator.

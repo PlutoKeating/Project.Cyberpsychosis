@@ -1,4 +1,4 @@
-import { EmergenceKernel, SimulatorPlugin } from "@emergence/core";
+import { EmergenceKernel, SimulatorPlugin } from "cyberpsychosis-core";
 
 /**
  * Plugin 3: Logic & Rule-as-Entity Simulator (Baba Is You style).

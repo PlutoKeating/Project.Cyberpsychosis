@@ -1,4 +1,4 @@
-import { EmergenceKernel, SimulatorPlugin } from "@emergence/core";
+import { EmergenceKernel, SimulatorPlugin } from "cyberpsychosis-core";
 
 /**
  * Plugin 2: 2D Physics, Shockwave Impulse & Structural Integrity Simulator.

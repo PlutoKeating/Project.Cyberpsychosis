@@ -2,7 +2,7 @@ import {
   CausalLineageReport,
   EmergenceKernel,
   EntityId,
-} from "@emergence/core";
+} from "cyberpsychosis-core";
 import {
   ChemistryPlugin,
   LogicRulePlugin,
@@ -11,7 +11,7 @@ import {
   SemanticLlmPlugin,
   SemanticTranslationResult,
   SocialAgentPlugin,
-} from "@emergence/plugins";
+} from "cyberpsychosis-plugins";
 
 export interface OutpostEntities {
   wordWaterId: EntityId;

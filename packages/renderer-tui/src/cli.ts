@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import readline from "node:readline";
-import { createOutpostSandbox } from "@emergence/demo-minimal";
+import { createOutpostSandbox } from "cyberpsychosis-demo";
 import { renderCausalLineageToAscii, renderSnapshotToAscii } from "./index.js";
 
 function runAutoDemo(): void {

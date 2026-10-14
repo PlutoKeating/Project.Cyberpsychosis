@@ -4,7 +4,7 @@ export function getWorkbenchHtml(): string {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Emergence Engine — Visual Workbench & Causal Inspector</title>
+  <title>Cyberpsychosis Engine — Visual Workbench & Causal Inspector</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -143,7 +143,7 @@ export function getWorkbenchHtml(): string {
 </head>
 <body>
   <header>
-    <h1>EMERGENCE ENGINE WORKBENCH — Micro Outpost (16x12 Multi-Modal Sandbox)</h1>
+    <h1>CYBERPSYCHOSIS WORKBENCH — Micro Outpost (16x12 Multi-Modal Sandbox)</h1>
     <div class="metrics-bar" id="metricsBar"></div>
   </header>
   <main>
