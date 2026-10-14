@@ -15,6 +15,11 @@ describe("cyberpsychosis-website — Static Build, Visual Journey, i18n Scaffold
       "index.html",
       "style.css",
       "app.js",
+      "engine/core/index.js",
+      "engine/core/kernel.js",
+      "engine/core/lockstep.js",
+      "engine/plugins/index.js",
+      "engine/demo/index.js",
       "404.html",
       "sitemap.xml",
       "robots.txt",
@@ -64,9 +69,17 @@ describe("cyberpsychosis-website — Static Build, Visual Journey, i18n Scaffold
       }
     }
 
-    // Verify User Journey Map, H5 Live Canvas, SVG Diagrams, and Screenshot Gallery on Landing Page
+    // Verify User Journey Map, H5 Live Canvas, Real Engine Module Binding, SVG Diagrams, and Screenshot Gallery on Landing Page
     const landingHtml = readFileSync(join(distDir, "index.html"), "utf8");
     assert.equal(landingHtml.includes('id="hero-sim-canvas"'), true, "Landing page missing H5 live simulation canvas");
+    assert.equal(landingHtml.includes('id="sim-state-hash"'), true, "Landing page missing live FNV-1a stateHash badge");
+    assert.equal(landingHtml.includes('id="sim-share-btn"'), true, "Landing page missing deterministic story share button");
+    const appJs = readFileSync(join(distDir, "app.js"), "utf8");
+    assert.equal(
+      appJs.includes('from "/engine/demo/index.js"'),
+      true,
+      "Expected app.js to import real OutpostSandbox kernel in-browser"
+    );
     assert.equal(landingHtml.includes("/screenshots/workbench-live.png"), true, "Landing page missing Web Studio screenshot");
     assert.equal(landingHtml.includes("/screenshots/tui-live.png"), true, "Landing page missing Terminal TUI screenshot");
     assert.equal(landingHtml.includes("/screenshots/worldfork-inspector.png"), true, "Landing page missing WorldFork screenshot");

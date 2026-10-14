@@ -95,11 +95,18 @@ npx cyberpsychosis web    # Launch Web Visual Workbench (:4173)`,
   },
   sandbox: {
     headerTitle: L(
-      "LIVE H5 SANDBOX // 16×12 微缩生态站",
-      "LIVE H5 SANDBOX // 16×12 MICRO OUTPOST"
+      "IN-BROWSER REAL KERNEL // 16×12 微缩生态站",
+      "IN-BROWSER REAL KERNEL // 16×12 MICRO OUTPOST"
     ),
     seedLabel: L("SEED: 20261014", "SEED: 20261014"),
     autoPlayBtn: L("AUTO LOOP", "AUTO LOOP"),
+    stepOneBtn: L("STEP +1", "STEP +1"),
+    rewindBtn: L("REWIND -1", "REWIND -1"),
+    shareBtn: L("SHARE STORY ⧉", "SHARE STORY ⧉"),
+    canvasHint: L(
+      "点选任意实体实时运行 kernel.causal.traceLineage(id) · 点击词块可直接在真内核中推动",
+      "Click any entity to execute live kernel.causal.traceLineage(id) · Click word blocks to push in real kernel"
+    ),
     canvasAria: L(
       "16x12 微缩生态站实时涌现模拟画布",
       "16x12 Micro Outpost Live Emergence Simulation Canvas"

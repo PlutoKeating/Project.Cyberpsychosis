@@ -162,10 +162,33 @@ export function getWorkbenchHtml(): string {
         <button class="warn" onclick="triggerWaterIsHot()">Push Baba Block: [WATER IS HOT]</button>
         <button class="success" onclick="quickSemantic('Make smoke calm')">Semantic DSL: "Make smoke calm"</button>
         <button onclick="quickSemantic('Make water cool')">Semantic DSL: "Make water cool"</button>
+        <button onclick="shareReplayUrl()">Share Story Link (?replay=...)</button>
+        <button onclick="exportBundleJson()">Export WorldBundle JSON</button>
       </div>
       <div class="controls-row">
+        <select id="prefabBrush" style="background:#090d16;color:var(--text);border:1px solid var(--border);border-radius:5px;padding:6px;font-family:inherit;font-size:12px;">
+          <option value="">[Select Mode: Click Entity to Inspect]</option>
+          <option value="oil_barrel">Brush: Spawn OilDrum (o)</option>
+          <option value="cargo_crate">Brush: Spawn Rigid Crate (#)</option>
+          <option value="water_pump">Brush: Spawn CoolantPump (P)</option>
+          <option value="smoke">Brush: Spawn SmokeCloud (~)</option>
+          <option value="agent">Brush: Spawn Engineer (@)</option>
+        </select>
         <input id="dslInput" type="text" placeholder="Enter Natural Language or Restricted DSL (e.g. 'Make smoke calm' or 'OVERRIDE water IS cool')" />
         <button class="success" onclick="submitCustomDsl()">WorldFork Preview & Inject</button>
+      </div>
+      <div class="controls-row" style="font-size:11px;color:var(--muted);">
+        <span>Visual Rule Builder:</span>
+        <select id="rbSub" style="background:#090d16;color:var(--text);border:1px solid var(--border);padding:3px;"><option>smoke</option><option>water</option><option>agent</option><option>oil</option></select>
+        <span>WHEN adjacent TO</span>
+        <select id="rbTarget" style="background:#090d16;color:var(--text);border:1px solid var(--border);padding:3px;"><option>agent</option><option>broken</option><option>burning</option><option>generator</option></select>
+        <span>DO</span>
+        <select id="rbAct" style="background:#090d16;color:var(--text);border:1px solid var(--border);padding:3px;">
+          <option value="add_prop(target.panic, -40)">add_prop(target.panic, -40)</option>
+          <option value="set_prop(target.integrity, 100); remove_tag(target, broken)">repair target structure</option>
+          <option value="set_prop(target.temp, 18); remove_tag(target, burning)">cool & extinguish target</option>
+        </select>
+        <button onclick="buildAndInjectVisualRule()">Compile & Fork-Verify</button>
       </div>
       <div id="forkPreviewBox" class="rules-list" style="display:none;"></div>
     </div>
@@ -255,6 +278,34 @@ export function getWorkbenchHtml(): string {
       await submitCustomDsl();
     }
 
+    async function buildAndInjectVisualRule() {
+      const sub = document.getElementById("rbSub").value;
+      const target = document.getElementById("rbTarget").value;
+      const act = document.getElementById("rbAct").value;
+      const dsl = "RULE visual_" + sub + "_" + target + " WHEN adjacent(" + sub + ", " + target + ") DO " + act;
+      document.getElementById("dslInput").value = dsl;
+      await submitCustomDsl();
+    }
+
+    async function shareReplayUrl() {
+      const data = await api("/api/replay-tape");
+      const url = window.location.origin + "/?replay=" + data.encoded;
+      const box = document.getElementById("forkPreviewBox");
+      box.style.display = "block";
+      box.innerHTML = "<strong>Deterministic Story Replay Tape Ready:</strong><br/>" +
+        "StateHash: <code>" + data.tape.expectedStateHash + "</code> | Commands: " + data.tape.commands.length + "<br/>" +
+        "Share URL: <code>" + url + "</code>";
+      if (navigator.clipboard) navigator.clipboard.writeText(url);
+    }
+
+    async function exportBundleJson() {
+      const data = await api("/api/world-bundle");
+      const box = document.getElementById("forkPreviewBox");
+      box.style.display = "block";
+      box.innerHTML = "<strong>Declarative WorldBundle JSON (Hot-Reloadable):</strong><br/>" +
+        "<code>" + JSON.stringify(data.bundle).slice(0, 360) + "...</code>";
+    }
+
     async function submitCustomDsl() {
       const input = document.getElementById("dslInput").value.trim();
       if (!input) return;
@@ -304,6 +355,7 @@ export function getWorkbenchHtml(): string {
       const m = currentSnapshot.metrics;
       document.getElementById("metricsBar").innerHTML =
         "<span class='metric-pill'>Tick: <b>" + currentSnapshot.tick + "</b></span>" +
+        "<span class='metric-pill'>Hash: <code>" + (currentSnapshot.stateHash || "") + "</code></span>" +
         "<span class='metric-pill'>Entities: <b>" + m.entityCount + "</b></span>" +
         "<span class='metric-pill'>Burning: <b style='color:#ef4444'>" + m.burningCount + "</b></span>" +
         "<span class='metric-pill'>Panicked NPCs: <b style='color:#f43f5e'>" + m.panickedAgentCount + "</b></span>" +
@@ -414,6 +466,13 @@ export function getWorkbenchHtml(): string {
       const rect = canvas.getBoundingClientRect();
       const gx = Math.floor(((ev.clientX - rect.left) / canvas.width) * currentSnapshot.grid.width);
       const gy = Math.floor(((ev.clientY - rect.top) / canvas.height) * currentSnapshot.grid.height);
+      const brush = document.getElementById("prefabBrush").value;
+      if (brush) {
+        const res = await api("/api/spawn", "POST", { prefabId: brush, x: gx, y: gy });
+        currentSnapshot = res.snapshot;
+        renderAll();
+        return;
+      }
       const hit = currentSnapshot.entities.find(e => Math.round(e.x) === gx && Math.round(e.y) === gy);
       if (hit) {
         selectedEntityId = hit.id;
@@ -422,7 +481,19 @@ export function getWorkbenchHtml(): string {
       }
     });
 
-    refresh();
+    (async function initWorkbench() {
+      const params = new URLSearchParams(window.location.search);
+      const replayParam = params.get("replay");
+      if (replayParam) {
+        const res = await api("/api/replay-tape", "POST", { encoded: replayParam });
+        if (res.snapshot) {
+          currentSnapshot = res.snapshot;
+          renderAll();
+          return;
+        }
+      }
+      await refresh();
+    })();
   </script>
 </body>
 </html>`;

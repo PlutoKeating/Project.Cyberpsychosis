@@ -32,13 +32,21 @@ describe("cyberpsychosis-web — Workbench HTTP Server & REST Protocol", () => {
         body: JSON.stringify({ count: 5 }),
       });
       const stepJson = (await stepRes.json()) as {
-        snapshot: { tick: number; metrics: { panickedAgentCount: number } };
+        snapshot: {
+          tick: number;
+          entities: Array<{ id: number; name: string }>;
+          metrics: { panickedAgentCount: number };
+        };
       };
       assert.equal(stepJson.snapshot.tick, 5);
       assert.equal(stepJson.snapshot.metrics.panickedAgentCount, 2);
 
-      // 3. Query Causal DAG for Engineer Beta (#12)
-      const causalRes = await fetch(`${baseUrl}/api/causal/12`);
+      // 3. Query Causal DAG for Engineer Beta
+      const betaEntity = stepJson.snapshot.entities.find(
+        (e: { name: string }) => e.name === "Engineer_Beta"
+      );
+      const betaId = betaEntity ? betaEntity.id : 14;
+      const causalRes = await fetch(`${baseUrl}/api/causal/${betaId}`);
       const causalJson = (await causalRes.json()) as {
         report: { chain: Array<{ domain: string }> };
       };
@@ -68,6 +76,22 @@ describe("cyberpsychosis-web — Workbench HTTP Server & REST Protocol", () => {
       };
       assert.equal(rewindJson.ok, true);
       assert.equal(rewindJson.snapshot.tick, 2);
+
+      // 6. Export deterministic ReplayTape and WorldBundle via REST API
+      const tapeRes = await fetch(`${baseUrl}/api/replay-tape`);
+      const tapeJson = (await tapeRes.json()) as {
+        encoded: string;
+        tape: { expectedStateHash: string };
+      };
+      assert.equal(typeof tapeJson.encoded, "string");
+      assert.equal(tapeJson.encoded.length > 10, true);
+
+      const bundleRes = await fetch(`${baseUrl}/api/world-bundle`);
+      const bundleJson = (await bundleRes.json()) as {
+        bundle: { version: number; entities: unknown[] };
+      };
+      assert.equal(bundleJson.bundle.version, 1);
+      assert.equal(bundleJson.bundle.entities.length >= 12, true);
     } finally {
       await new Promise<void>((resolve) => server.close(() => resolve()));
     }

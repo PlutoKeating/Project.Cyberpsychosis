@@ -152,7 +152,7 @@ export function renderPageLayout(opts: PageLayoutOptions): string {
     ${opts.bodyHtml}
   </main>
   ${renderSiteFooter()}
-  <script src="/app.js" defer></script>
+  <script src="/app.js" type="module"></script>
 </body>
 </html>`;
 }

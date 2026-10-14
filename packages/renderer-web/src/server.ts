@@ -49,6 +49,8 @@ export function createWorkbenchServer(initialSeed = 20261014): {
         sendJson(res, 200, {
           snapshot: sandbox.kernel.getSnapshot(),
           checkpoints: sandbox.kernel.getAvailableCheckpointTicks(),
+          memoryStats: sandbox.kernel.getSnapshotMemoryStats(),
+          prefabs: sandbox.kernel.vocabulary.getAllPrefabs(),
         });
         return;
       }
@@ -59,6 +61,7 @@ export function createWorkbenchServer(initialSeed = 20261014): {
         sandbox.kernel.stepMany(count);
         sendJson(res, 200, {
           snapshot: sandbox.kernel.getSnapshot(),
+          memoryStats: sandbox.kernel.getSnapshotMemoryStats(),
         });
         return;
       }
@@ -70,6 +73,7 @@ export function createWorkbenchServer(initialSeed = 20261014): {
         sendJson(res, 200, {
           ok,
           snapshot: sandbox.kernel.getSnapshot(),
+          memoryStats: sandbox.kernel.getSnapshotMemoryStats(),
         });
         return;
       }
@@ -89,6 +93,7 @@ export function createWorkbenchServer(initialSeed = 20261014): {
         sendJson(res, 200, {
           ok,
           snapshot: sandbox.kernel.getSnapshot(),
+          memoryStats: sandbox.kernel.getSnapshotMemoryStats(),
         });
         return;
       }
@@ -100,6 +105,108 @@ export function createWorkbenchServer(initialSeed = 20261014): {
         const translation = sandbox.injectSemanticRule(input, previewTicks);
         sendJson(res, 200, {
           translation,
+          snapshot: sandbox.kernel.getSnapshot(),
+          memoryStats: sandbox.kernel.getSnapshotMemoryStats(),
+        });
+        return;
+      }
+
+      if (req.method === "POST" && url.pathname === "/api/spawn") {
+        const body = await readJsonBody(req);
+        const prefabId = String(body.prefabId ?? "");
+        const x = Number(body.x ?? 0);
+        const y = Number(body.y ?? 0);
+        const name = body.name ? String(body.name) : undefined;
+        sandbox.kernel.applyReplayCommand({
+          tick: sandbox.kernel.tick,
+          type: "spawn",
+          prefabId,
+          x,
+          y,
+          name,
+        });
+        sendJson(res, 200, {
+          ok: true,
+          snapshot: sandbox.kernel.getSnapshot(),
+        });
+        return;
+      }
+
+      if (req.method === "POST" && url.pathname === "/api/edit-entity") {
+        const body = await readJsonBody(req);
+        const entityId = Number(body.entityId);
+        if (typeof body.prop === "string" && typeof body.value === "number") {
+          sandbox.kernel.applyReplayCommand({
+            tick: sandbox.kernel.tick,
+            type: "set_prop",
+            entityId,
+            prop: body.prop,
+            value: body.value,
+          });
+        }
+        if (typeof body.addTag === "string" && body.addTag.trim()) {
+          sandbox.kernel.applyReplayCommand({
+            tick: sandbox.kernel.tick,
+            type: "add_tag",
+            entityId,
+            tag: body.addTag.trim(),
+          });
+        }
+        if (typeof body.removeTag === "string" && body.removeTag.trim()) {
+          sandbox.kernel.applyReplayCommand({
+            tick: sandbox.kernel.tick,
+            type: "remove_tag",
+            entityId,
+            tag: body.removeTag.trim(),
+          });
+        }
+        sendJson(res, 200, {
+          ok: true,
+          snapshot: sandbox.kernel.getSnapshot(),
+        });
+        return;
+      }
+
+      if (req.method === "GET" && url.pathname === "/api/replay-tape") {
+        const { encodeReplayTapeToBase64Url } = await import("cyberpsychosis-core");
+        const tape = sandbox.kernel.exportReplayTape();
+        sendJson(res, 200, {
+          tape,
+          encoded: encodeReplayTapeToBase64Url(tape),
+        });
+        return;
+      }
+
+      if (req.method === "POST" && url.pathname === "/api/replay-tape") {
+        const { decodeReplayTapeFromBase64Url } = await import("cyberpsychosis-core");
+        const body = await readJsonBody(req);
+        const tape =
+          typeof body.encoded === "string"
+            ? decodeReplayTapeFromBase64Url(body.encoded)
+            : (body.tape as ReturnType<typeof sandbox.kernel.exportReplayTape>);
+        const verification = sandbox.kernel.replayFromTape(tape, () => {
+          sandbox = createOutpostSandbox(tape.seed);
+        });
+        sendJson(res, 200, {
+          verification,
+          snapshot: sandbox.kernel.getSnapshot(),
+        });
+        return;
+      }
+
+      if (req.method === "GET" && url.pathname === "/api/world-bundle") {
+        sendJson(res, 200, {
+          bundle: sandbox.kernel.exportWorldBundle("MicroOutpostBundle", "Live exported world bundle"),
+        });
+        return;
+      }
+
+      if (req.method === "POST" && url.pathname === "/api/world-bundle") {
+        const body = await readJsonBody(req);
+        const bundle = body.bundle as Parameters<typeof sandbox.kernel.loadWorldBundle>[0];
+        sandbox.kernel.loadWorldBundle(bundle);
+        sendJson(res, 200, {
+          ok: true,
           snapshot: sandbox.kernel.getSnapshot(),
         });
         return;

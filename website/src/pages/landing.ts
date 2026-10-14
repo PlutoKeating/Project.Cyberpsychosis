@@ -188,10 +188,10 @@ export function renderLandingPage(locale: Locale = DEFAULT_LOCALE): string {
       <div class="cyber-terminal border border-border-strong bg-surface p-4 shadow-lg sm:p-6 lg:col-span-7" id="sandbox">
         <div class="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3 font-mono text-xs">
           <span class="text-accent"><span class="signal-dot mr-2 inline-block size-2 rounded-full bg-accent"></span>${tr(t.sandbox.headerTitle)}</span>
-          <div class="flex items-center gap-3">
-            <span id="sim-active-rule" class="border border-accent bg-accent-soft px-2.5 py-0.5 font-semibold text-accent">${escapeHtml(t.sandbox.steps[2].ruleText)}</span>
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="sim-active-rule" class="border border-accent bg-accent-soft px-2 py-0.5 font-semibold text-accent">${escapeHtml(t.sandbox.steps[2].ruleText)}</span>
             <span id="sim-active-tick" class="text-fg-subtle">${escapeHtml(t.sandbox.steps[2].tickText)}</span>
-            <button type="button" id="sim-play-btn" class="border border-border-strong bg-bg-elevated px-2.5 py-0.5 text-fg hover:border-accent hover:text-accent">${tr(t.sandbox.autoPlayBtn)}</button>
+            <code id="sim-state-hash" class="border border-border bg-code-bg px-2 py-0.5 text-code-fg">0x811c9dc5</code>
           </div>
         </div>
 
@@ -199,19 +199,34 @@ export function renderLandingPage(locale: Locale = DEFAULT_LOCALE): string {
           ${simStepBtnsHtml}
         </div>
 
-        <div class="relative mt-3 overflow-hidden border border-border bg-code-bg">
+        <div class="mt-2.5 flex flex-wrap items-center justify-between gap-2 border-y border-border py-2 font-mono text-xs">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" id="sim-step-one-btn" class="border border-accent bg-accent-soft px-2.5 py-1 font-semibold text-accent hover:bg-accent hover:text-accent-fg">${tr(t.sandbox.stepOneBtn)}</button>
+            <button type="button" id="sim-rewind-btn" class="border border-border-strong bg-bg-elevated px-2.5 py-1 text-fg hover:border-accent hover:text-accent">${tr(t.sandbox.rewindBtn)}</button>
+            <button type="button" id="sim-play-btn" class="border border-border-strong bg-bg-elevated px-2.5 py-1 text-fg hover:border-accent hover:text-accent">${tr(t.sandbox.autoPlayBtn)}</button>
+          </div>
+          <button type="button" id="sim-share-btn" class="border border-accent bg-surface px-2.5 py-1 font-semibold text-accent hover:bg-accent hover:text-accent-fg">${tr(t.sandbox.shareBtn)}</button>
+        </div>
+
+        <div class="relative mt-2.5 overflow-hidden border border-border bg-code-bg">
           <canvas id="hero-sim-canvas" width="704" height="396" class="w-full h-auto block cursor-pointer" aria-label="${escapeHtml(pickLocale(t.sandbox.canvasAria, locale))}"></canvas>
         </div>
 
-        <div class="mt-3 flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-fg-subtle">
+        <div class="mt-2 flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-fg-subtle">
           <span>${tr(t.sandbox.legendWord)}</span>
           <span>${tr(t.sandbox.legendPipe)}</span>
           <span>${tr(t.sandbox.legendSocial)}</span>
           <span>${tr(t.sandbox.legendSmoke)}</span>
         </div>
 
-        <div class="mt-3 border-t border-border bg-code-bg p-3">
-          ${simTracesHtml}
+        <div class="mt-2.5 border-t border-border bg-code-bg p-3">
+          <div class="mb-1 flex items-center justify-between font-mono text-xs text-fg-subtle">
+            <span>${tr(t.sandbox.canvasHint)}</span>
+          </div>
+          <div id="sim-live-causal-output" class="font-mono text-xs leading-relaxed text-code-fg" hidden></div>
+          <div id="sim-preset-traces">
+            ${simTracesHtml}
+          </div>
         </div>
       </div>
     </section>
