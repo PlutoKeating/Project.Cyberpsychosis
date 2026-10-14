@@ -20,17 +20,18 @@
 3. **跨模态解耦通信：共享属性黑板 + 因果事件总线（Causal DAG）**
    - 各模拟器插件零直接依赖，通过共享通用标量组件（如 `temp`、`integrity`、`panic`）与携带 `causeId` 的因果事件总线联动。
    - 内置一等公民**有向无环因果图（Causal Lineage DAG）**，支持任意结果实体的完整起因链回溯与故事生成。
-4. **严格确定性、时间旅行回放与平行世界分叉（World Fork）**
-   - 基于固定步长（Fixed-Tick）与受控种子 PRNG（Mulberry32），内置快照环缓冲区支持任意帧倒带回放（`rewindTo`）。
-   - 支持后台极速 `forkAndPredict(ticks)` 平行推演未来状态，用于验证新注入规则的安全性与涌现趋势预测。
-5. **六大模拟器插件与唯一极简综合验证场景**
-   - 内置 **化学/元素（CA）**、**物理（刚体/力场）**、**逻辑/规则（Baba式重编译）**、**网络/物流（有向流与背压）**、**社会/Agent（效用AI与情绪传染）**、**语义桥接（LLM $\rightarrow$ 受限 DSL $\rightarrow$ ECS，自带离线确定性编译器）**。
-   - 提供 `cyberpsychosis-demo`（微缩生态站 Micro Outpost），在同一张 16×12 沙盒中完整串联六大涌现机制。
-6. **Renderer 零绑定：双官方渲染端（TUI + Web Workbench）**
+4. **严格确定性、增量快照（Copy-on-Write Delta）、回放分享与 Lockstep 帧同步**
+   - 基于固定步长（Fixed-Tick）、受控种子 PRNG（Mulberry32）与 32-bit FNV-1a 状态指纹（`stateHash`）。
+   - 内置 **周期关键帧 + 写时复制增量帧（CoW Delta Snapshot）** 环形缓冲区（压缩比达 `4.2x~6.2x`），支持任意帧倒带回放（`rewindTo`）与后台 `forkAndPredict(ticks)` 平行世界推演。
+   - 内置 `ReplayTape` Base64URL 故事分享（`< 150` 字符 URL 复现整局涌现链）与带延迟自动回滚重演的 `LockstepCoordinator` 多人帧同步协调器。
+5. **六大模拟器插件、刚体物理/Rapier2D 桥接与综合验证场景**
+   - 内置 **化学/元素（CA）**、**物理（2D 刚体动量碰撞、可断裂桁架关节 `joint`、爆炸冲击波，并提供 `ExternalRigidBodyAdapter` 对接 `@dimforge/rapier2d-deterministic-compat`）**、**逻辑/规则（Baba式重编译）**、**网络/物流（有向流与背压）**、**社会/Agent（效用AI与情绪传染）**、**语义桥接（LLM $\rightarrow$ 受限 DSL $\rightarrow$ ECS，自带离线确定性编译器）**。
+   - 支持 `WorldBundle` 声明式世界 JSON 热重载，并提供 `cyberpsychosis-demo`（微缩生态站 Micro Outpost），在同一张 16×12 沙盒中完整串联六大涌现机制。
+6. **Renderer 零绑定：双官方渲染端（TUI + Web Workbench）与可视化内容工具链**
    - `cyberpsychosis-tui`：终端 ANSI/ASCII 实时交互沙盒与因果检查器。
-   - `cyberpsychosis-web`：浏览器端多图层 Canvas 画布、时间轴控制器、因果图溯源面板、WorldFork 预览与实时 DSL 编辑器。
-7. **官方宣传与多章节文档站（`website/`）**
-   - 托管于 Cloudflare Workers（Worker 名称：`cyberpsychosis`），全站复用 `plutokeating.beer` 设计系统与模块化 `*.i18n.ts` 中英双语架构（构建期强制零硬编码视觉参数与零硬编码页面文案校验），包含五阶段视觉化 Landing Page（H5 实时涌现画布、SVG 六维因果图、双端真实运行截图画廊、六大机制动效卡片、四层架构蓝图）、8 章配图技术文档、关于我们、服务条款与隐私政策。
+   - `cyberpsychosis-web`：浏览器端多图层 Canvas 画布、时间轴控制器、Prefab 画笔、可视化规则构建器（Visual Rule Builder）、`WorldBundle` JSON 导入导出与 URL 故事分享。
+7. **官方宣传与多章节文档站（`website/`）—— 浏览器内直跑真内核**
+   - 托管于 Cloudflare Workers（Worker 名称：`cyberpsychosis`），全站复用 `plutokeating.beer` 设计系统与模块化 `*.i18n.ts` 中英双语架构（构建期强制零硬编码视觉参数与零硬编码页面文案校验），首页 H5 沙盒直接挂载编译后的真实 `cyberpsychosis-core` + `cyberpsychosis-demo` ES 模块（支持浏览器内直接推词块、单步推演、CoW 回退、实时计算 `stateHash` 与一键复制 `?replay=` 故事链接）。
 
 ---
 
@@ -80,7 +81,10 @@ npm run demo:tui
 # 4. 启动 Web 涌现实验室工作台 (默认 http://localhost:4173)
 npm run start:web
 
-# 5. 构建并预览官方宣传与文档网站
+# 5. 运行四档位实体规模与增量快照性能基准测试 (32 ~ 5,000 实体)
+npm run bench
+
+# 6. 构建并预览官方宣传与文档网站
 npm run site:build
 ```
 

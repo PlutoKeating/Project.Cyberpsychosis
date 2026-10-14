@@ -37,14 +37,34 @@ export class EmergenceKernel {
   /** 连续推进 N 个确定性逻辑帧 */
   stepMany(count: number): TickResult[];
 
-  /** 导出零渲染绑定的当前世界快照 */
+  /** 导出零渲染绑定的当前世界快照（含 32-bit FNV-1a stateHash） */
   getSnapshot(): WorldSnapshot;
 
-  /** 时间旅行：回滚到历史环形缓冲区中的指定帧 */
+  /** 计算当前世界状态的确定性 32-bit FNV-1a 校验和 ("0x...") */
+  getStateHash(): string;
+
+  /** 获取增量快照 (CoW Delta) 与关键帧的内存压缩统计 */
+  getSnapshotMemoryStats(): SnapshotMemoryStats;
+
+  /** 时间旅行：通过 CoW 反向增量或关键帧回滚到指定帧 */
   rewindTo(tick: number): boolean;
 
   /** 平行世界分叉：克隆当前世界并静默推演未来 ticks 帧 */
   forkAndPredict(ticks: number, mutateFn?: (forkedKernel: EmergenceKernel) => void): ForkPredictionResult;
+
+  /** 导出确定性指令回放磁带（支持 Base64URL 分享与 Lockstep 校验） */
+  exportReplayTape(): ReplayTape;
+
+  /** 从 Tick 0 重放磁带并校验最终 stateHash */
+  replayFromTape(tape: ReplayTape, resetToTickZeroFn?: (kernel: EmergenceKernel) => void): {
+    verified: boolean;
+    actualStateHash: string;
+    expectedStateHash: string;
+  };
+
+  /** 导出与热重载声明式世界工程包 (WorldBundle JSON) */
+  exportWorldBundle(name?: string, description?: string): WorldBundle;
+  loadWorldBundle(bundle: WorldBundle): void;
 }
 ```
 
@@ -115,4 +135,8 @@ export interface DeclarativeRule {
 - `POST /api/push-word`：在沙盒中推动词块或移动实体（请求体 `{ "preset": "WATER_IS_HOT" }`）
 - `POST /api/inject-dsl`：通过自然语言或受限 DSL 动态注入新规则并附带 `WorldFork` 平行世界安全预览
 - `GET /api/causal/:id`：查询指定事件或实体的完整因果溯源链（Causal Lineage DAG）
+- `POST /api/spawn`：使用 Prefab 画笔在指定坐标生成实体
+- `POST /api/edit-entity`：实时修改实体属性或标签并记入回放磁带
+- `GET /api/replay-tape` & `POST /api/replay-tape`：导出/重放 Base64URL 确定性故事磁带（`?replay=...`）
+- `GET /api/world-bundle` & `POST /api/world-bundle`：导出/热重载声明式 `WorldBundle` JSON
 - `POST /api/reset`：重置微缩生态站场景

@@ -5,7 +5,7 @@
 ## 五阶段用户旅程与页面结构
 
 - `/`：极简视觉化 Landing Page（五阶段 User Journey Map）：
-  1. **Stage 01 · 实时沙盒 (`#top` / `#sandbox`)**：极简核心宣言 + 交互式 60fps HTML5 Canvas 16×12 微缩生态站模拟器（支持 4 阶段操作触发与因果同步追踪）。
+  1. **Stage 01 · 浏览器内真内核实时沙盒 (`#top` / `#sandbox`)**：极简核心宣言 + 浏览器内直接运行编译后的真实 `cyberpsychosis-core` + `cyberpsychosis-demo` ES 模块（支持点击推动词块、单帧步进 `STEP +1`、CoW 增量快照倒带 `REWIND -1`、点选实体实时执行 `kernel.causal.traceLineage(id)`、实时计算 32-bit FNV-1a `stateHash` 以及一键生成 `?replay=` 故事分享链接）。
   2. **Stage 02 · 因果推演 (`#cascade`)**：SVG 动态六维因果传导示意图与共享标量属性黑板。
   3. **Stage 03 · 双端实拍 (`#screenshots`)**：真实运行截图画廊（Web 多图层实验室、终端 ASCII/ANSI 沙盒、WorldFork 平行时间线检查器）与标注引线。
   4. **Stage 04 · 六大机制 (`#highlights`)**：6 张独立 SVG 动效示意图卡片（五维公式、规则即实体、因果 DAG、时间旅行与分叉、六大解耦插件、零绑定快照）。

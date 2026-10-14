@@ -1,19 +1,21 @@
-# `@emergence/core` 内部架构设计
+# `cyberpsychosis-core` 内部架构设计
 
 ## 1. 模块组成与职责边界
 
 ```text
 packages/core/src/
-├── types.ts        # 公共类型、快照协议、DSL AST 与插件接口定义
+├── types.ts        # 公共类型、快照协议、ReplayTape、WorldBundle 与插件接口定义
 ├── prng.ts         # Mulberry32 受控种子确定性随机数生成器
-├── ecs.ts          # 确定性 ECS 容器、属性钳制与状态快照序列化
+├── ecs.ts          # 确定性 ECS 容器、倒排标签索引、O(1) 网格桶与 CoW 增量追踪
 ├── spatial.ts      # Grid2D + Continuous2D + GraphTopology 多模态空间索引
-├── causal.ts       # 因果事件总线与有向无环因果图 (Causal DAG) 溯源器
+├── causal.ts       # 因果事件总线、有向无环因果图 (Causal DAG) 与追加式 CoW 增量
 ├── vocabulary.ts   # 原子属性约束与 Prefab 原型注册表
 ├── grammar.ts      # 空间邻接、半径、图边、三连句法模式匹配器
 ├── semantics.ts    # 原子状态修改与因果自动关联执行器
 ├── rules.ts        # 规则即实体重编译器 (Baba式词块扫描) 与受限 DSL 编译器
-├── kernel.ts       # 内核主控循环、快照环缓冲区 (Time-Travel) 与平行分叉 (WorldFork)
+├── kernel.ts       # 内核主控循环、CoW Delta/Keyframe 快照环、StateHash、WorldFork 与 WorldBundle
+├── lockstep.ts     # Lockstep 帧同步回滚协调器与 ReplayTape Base64URL 编解码器
+├── bench.ts        # 四档位实体规模 (32 ~ 5,000 实体) 性能与快照压缩基准测试
 └── index.ts        # 统一导出入口
 ```
 

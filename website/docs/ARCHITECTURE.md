@@ -8,7 +8,7 @@ src/design-system/designSystem.ts
   ──(scripts/gen-tokens.ts)──────► src/design-system/tokens.generated.css
   ──(scripts/gen-screenshots.ts)─► 运行真实 OutpostSandbox 生成 public/screenshots/*.png
   ──(scripts/lint-tokens.ts)─────► 零硬编码视觉参数 + 零硬编码页面文案 + *.i18n.ts 配对静态检查
-  ──(scripts/build-site.ts)──────► 预渲染全站双语 HTML + H5/SVG 交互脚本 + sitemap.xml 到 dist/
+  ──(scripts/build-site.ts)──────► 预渲染全站双语 HTML + 打包真实内核 ES 模块至 dist/engine/ + sitemap.xml
   ──(@tailwindcss/cli)───────────► 编译压缩 dist/style.css
   ──(wrangler deploy)────────────► Cloudflare Worker "cyberpsychosis"
 ```

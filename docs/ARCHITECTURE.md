@@ -42,7 +42,7 @@
 +-----------------------------------------------------------------------------------+
 | Layer 2: Pluggable Runtime Simulators (cyberpsychosis-plugins)                    |
 |  - ChemistryPlugin   : 温度传导、相变、接触反应矩阵、气体/火焰元胞自动机扩散           |
-|  - PhysicsPlugin     : 连续/离散坐标同步、速度/冲量、爆炸冲击波力场、结构完整度坍塌    |
+|  - PhysicsPlugin     : 2D 刚体动量碰撞、可断裂桁架关节 (joint)、冲击波、Rapier2D 适配 |
 |  - LogicRulePlugin   : Baba 式空间词块序列检测 ([NOUN] [IS] [PROP]) -> 实时规则重编译  |
 |  - LogisticsPlugin   : 有向图流网络求解、源/汇节点、容量背压、管网断裂级联拥塞        |
 |  - SocialAgentPlugin : 效用 AI 决策、恐惧/士气情绪图传染、协作维修 vs 恐慌逃生        |
@@ -53,14 +53,15 @@
                                          ▼
 +-----------------------------------------------------------------------------------+
 | Layer 1: Emergence Core (cyberpsychosis-core)                                     |
-|  - DeterministicECS      : 确定性属性存储 + 实体标签 + 关系索引 + 确定性遍历           |
+|  - DeterministicECS      : 确定性属性存储 + 倒排标签索引 + O(1) 网格桶 + CoW 增量追踪   |
 |  - VocabularyRegistry    : 原子 Tag、标量 Property Schema、Prefab 模板注册表         |
 |  - GrammarMatcher        : 空间邻接 (Grid/Radius)、图边匹配 (Graph)、状态匹配器       |
 |  - SemanticsExecutor     : 原子状态修改、实体派生/销毁、规则重写执行器               |
 |  - RuleEngine & DSL      : Rule-as-Entity 编译器 + 受限 DSL 解析与安全沙盒校验器      |
-|  - MultiModalSpatial     : Grid2D (网格) + Continuous2D (连续空间) + GraphTopology   |
-|  - CausalTracker & DAG   : 携带 CauseID 的事件总线 + 有向无环因果溯源图谱             |
-|  - EmergenceKernel       : 多频固定步长调度器 + Seeded PRNG + SnapshotRingBuffer/Fork|
+|  - MultiModalSpatial     : Grid2D (网格桶) + Continuous2D (连续空间) + GraphTopology |
+|  - CausalTracker & DAG   : 携带 CauseID 的事件总线 + 有向无环因果溯源图谱 + CoW 增量   |
+|  - Lockstep & Replay     : FNV-1a StateHash + ReplayTape URL 编码 + Lockstep 回滚帧同步|
+|  - EmergenceKernel       : 固定步长调度 + CoW Delta/Keyframe 快照环 + WorldFork/Bundle|
 +-----------------------------------------------------------------------------------+
 ```
 
