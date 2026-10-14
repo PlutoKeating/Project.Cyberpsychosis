@@ -73,7 +73,7 @@ export class ChemistryPlugin implements SimulatorPlugin<EmergenceKernel> {
       if (ecs.hasTag(id, "flammable") && !ecs.hasTag(id, "burning") && temp >= 85) {
         ecs.addTag(id, "burning");
         ecs.addTag(id, "hot");
-        entity.color = "#ff5722";
+        ecs.setAppearance(id, undefined, "#ff5722");
         causal.recordEvent({
           tick,
           domain: "chemistry",

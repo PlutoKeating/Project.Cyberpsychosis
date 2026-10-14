@@ -106,6 +106,7 @@ export class SemanticLlmPlugin implements SimulatorPlugin<EmergenceKernel> {
 
     // 2. Apply validated DSL rule to the primary world
     const injected = kernel.rules.injectDsl(kernel.tick, dsl, kernel.ecs, kernel.causal);
+    kernel.recordDslCommand(dsl);
     kernel.saveCheckpoint();
 
     return {

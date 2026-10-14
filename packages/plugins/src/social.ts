@@ -104,7 +104,7 @@ export class SocialAgentPlugin implements SimulatorPlugin<EmergenceKernel> {
       if (panic >= 60 && !wasPanicked) {
         ecs.addTag(agentId, "panicked");
         ecs.setMeta(agentId, "intent", "FLEEING_HAZARD");
-        agent.color = "#f43f5e";
+        ecs.setAppearance(agentId, undefined, "#f43f5e");
         const parentCause = causal.getLastCauseForEntity(agentId);
         causal.recordEvent({
           tick,
@@ -117,7 +117,7 @@ export class SocialAgentPlugin implements SimulatorPlugin<EmergenceKernel> {
       } else if (panic < 35 && wasPanicked) {
         ecs.removeTag(agentId, "panicked");
         ecs.setMeta(agentId, "intent", "MAINTAINING_OUTPOST");
-        agent.color = "#22c55e";
+        ecs.setAppearance(agentId, undefined, "#22c55e");
         const parentCause = causal.getLastCauseForEntity(agentId);
         causal.recordEvent({
           tick,

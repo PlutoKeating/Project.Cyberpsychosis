@@ -24,6 +24,8 @@ export interface OutpostEntities {
   generatorId: EntityId;
   oil1Id: EntityId;
   oil2Id: EntityId;
+  crateId: EntityId;
+  strutId: EntityId;
   agentAlphaId: EntityId;
   agentBetaId: EntityId;
 }
@@ -117,6 +119,24 @@ export class OutpostSandbox {
     });
 
     v.registerPrefab({
+      id: "cargo_crate",
+      name: "CargoCrate",
+      glyph: "#",
+      color: "#f59e0b",
+      tags: ["crate", "rigid_body", "movable"],
+      props: { temp: 24, mass: 2.5, restitution: 0.65, radius: 0.45, integrity: 90 },
+    });
+
+    v.registerPrefab({
+      id: "truss_strut",
+      name: "SupportStrut",
+      glyph: "T",
+      color: "#64748b",
+      tags: ["strut", "rigid_body", "static", "structure", "fragile"],
+      props: { temp: 22, mass: 50, restitution: 0.4, radius: 0.45, integrity: 85 },
+    });
+
+    v.registerPrefab({
       id: "agent",
       name: "Engineer",
       glyph: "@",
@@ -184,9 +204,20 @@ export class OutpostSandbox {
       capacity: 25,
     });
 
-    // 3. Flammable oil drums near the generator
+    // 3. Flammable oil drums & rigid-body cargo crate tethered by a breakable truss joint near the generator
     const oil1Id = vocabulary.spawnPrefab(ecs, "oil_barrel", 10, 5, { name: "OilDrum_East" });
     const oil2Id = vocabulary.spawnPrefab(ecs, "oil_barrel", 9, 6, { name: "OilDrum_South" });
+    const crateId = vocabulary.spawnPrefab(ecs, "cargo_crate", 8, 4, { name: "HeavyCrate_North" });
+    const strutId = vocabulary.spawnPrefab(ecs, "truss_strut", 7, 4, { name: "TrussStrut_West" });
+
+    spatial.addEdge({
+      id: "joint:strut->crate",
+      from: strutId,
+      to: crateId,
+      kind: "joint",
+      capacity: 1.35,
+      intact: true,
+    });
 
     // 4. Two outpost engineers connected by a social trust relationship
     const agentAlphaId = vocabulary.spawnPrefab(ecs, "agent", 10, 6, {
@@ -217,6 +248,8 @@ export class OutpostSandbox {
       generatorId,
       oil1Id,
       oil2Id,
+      crateId,
+      strutId,
       agentAlphaId,
       agentBetaId,
     };

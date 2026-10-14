@@ -19,13 +19,17 @@ describe("cyberpsychosis-demo — Cross-Domain Emergent Cascade & Semantic Recov
     assert.equal(shifted, true);
 
     // 3. Advance 5 ticks -> scalding water pumps into generator (Logistics) -> generator & oil ignite (Chemistry)
-    //    -> generator explodes & ruptures pipe (Physics) -> Engineer Alpha panics & infects Engineer Beta (Social)
+    //    -> generator explodes, ruptures pipe & hurls rigid-body crate snapping truss joint (Physics)
+    //    -> Engineer Alpha panics & infects Engineer Beta (Social)
     kernel.stepMany(5);
     const crisisMetrics = kernel.computeMetrics();
 
     assert.equal(crisisMetrics.burningCount >= 2, true, "Expected generator and oil drums to be burning");
     assert.equal(crisisMetrics.brokenPipeCount >= 1, true, "Expected explosion shockwave to rupture adjacent coolant pipe");
     assert.equal(crisisMetrics.panickedAgentCount, 2, "Expected both engineers to panic via hazard perception and social contagion");
+
+    const trussJoint = kernel.spatial.getEdge("joint:strut->crate");
+    assert.equal(trussJoint?.intact, false, "Expected shockwave impulse on rigid-body crate to snap the truss joint");
 
     // 4. Verify Causal DAG traces Engineer Beta's panic all the way back to pushing the [WORD:HOT] block!
     const lineage = sandbox.traceCrisisLineage(entities.agentBetaId);
